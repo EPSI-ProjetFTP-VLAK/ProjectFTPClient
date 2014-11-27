@@ -10,12 +10,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("view/main.fxml"));
 
         primaryStage.setTitle("FTP Client");
 
         Scene mainScene = new Scene(root, 1000, 800);
-        mainScene.getStylesheets().add(this.getClass().getResource("main.css").toExternalForm());
 
         primaryStage.setScene(mainScene);
         primaryStage.show();

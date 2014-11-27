@@ -1,11 +1,11 @@
-package fr.epsi;
+package fr.epsi.controller.connection;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-public class MainController
+public class ConnectionController
 {
     public TextField host;
     public TextField username;

@@ -1,8 +1,0 @@
-<?import javafx.scene.layout.BorderPane?>
-<BorderPane fx:controller="fr.epsi.MainController"
-          xmlns:fx="http://javafx.com/fxml">
-    <top>
-        <fx:include source="connection/connection.fxml" />
-    </top>
-
-</BorderPane>
