@@ -5,4 +5,8 @@
         <fx:include source="connection/connection.fxml" />
     </top>
 
+    <left>
+        <fx:include source="explorer/local/local_explorer.fxml" />
+    </left>
+
 </BorderPane>
