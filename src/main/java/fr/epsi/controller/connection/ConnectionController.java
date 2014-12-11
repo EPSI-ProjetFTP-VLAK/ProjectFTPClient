@@ -1,5 +1,6 @@
 package fr.epsi.controller.connection;
 
+import fr.epsi.controller.MainController;
 import fr.epsi.service.connection.ConnectionService;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
@@ -21,7 +22,12 @@ public class ConnectionController
         String password = this.password.getText();
         int port = Integer.valueOf(this.port.getText());
 
-        ConnectionService connectionService = new ConnectionService(host, username, password, port);
+        ConnectionService connectionService = MainController.getConnectionService();
+        connectionService.setHost(host);
+        connectionService.setUsername(username);
+        connectionService.setPassword(password);
+        connectionService.setPort(port);
+
         connectionService.start();
     }
 }

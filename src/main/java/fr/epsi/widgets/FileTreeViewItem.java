@@ -21,6 +21,7 @@ public class FileTreeViewItem extends TreeItem<String> {
     private void setParameters(Path file) {
         if(Files.isDirectory(file)){
             isDirectory = true;
+            setExpanded(false);
             //TODO ajouter image setGraphic(new ImageView(folderCollapseImage));
         }else{
             isDirectory=false;

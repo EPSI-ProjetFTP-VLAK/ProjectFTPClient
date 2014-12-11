@@ -20,6 +20,9 @@ public class ConnectionService extends Service<Void>
     private BufferedReader in;
     private PrintWriter out;
 
+    public ConnectionService() {
+    }
+
     public ConnectionService(String host, String username, String password, int port)
     {
         this.host = host;
@@ -41,7 +44,7 @@ public class ConnectionService extends Service<Void>
                     System.out.println(in.readLine());
 
                     out = new PrintWriter(socket.getOutputStream());
-                    out.println(username + " : " + password);
+                    out.println(username + " " + password);
                     out.flush();
 
                     socket.close();
@@ -52,5 +55,21 @@ public class ConnectionService extends Service<Void>
                 return null;
             }
         };
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 }

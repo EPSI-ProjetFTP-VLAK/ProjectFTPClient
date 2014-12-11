@@ -5,33 +5,44 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.VBox;
 
+import javax.swing.filechooser.FileSystemView;
+import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 
 public class LocalExplorerController {
     public VBox localExplorerContainer;
     public TreeView<String> localExplorer;
 
     public void initialize() {
+        TreeItem<String> rootNode = generateRootNode();
+        rootNode.setExpanded(true);
+
+        generateChildNodes(rootNode);
+
+        localExplorer.setRoot(rootNode);
+    }
+
+    public TreeItem<String> generateRootNode() {
         String root = "";
         try {
-            root = InetAddress.getLocalHost().getHostName();
+            root = getHostName();
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
 
-        TreeItem<String> rootNode = new TreeItem<String>(root);
+        return new TreeItem<String>(root);
+    }
 
-        Iterable<Path> rootDirectories = FileSystems.getDefault().getRootDirectories();
-        for (Path rootDirectory : rootDirectories) {
-            FileTreeViewItem treeNode = new FileTreeViewItem(rootDirectory);
+    public String getHostName() throws UnknownHostException {
+        return InetAddress.getLocalHost().getHostName();
+    }
+
+    public void generateChildNodes(TreeItem<String> rootNode) {
+        File[] rootDirectories = FileSystemView.getFileSystemView().getRoots();
+        for (File rootDirectory : rootDirectories) {
+            FileTreeViewItem treeNode = new FileTreeViewItem(rootDirectory.toPath());
             rootNode.getChildren().add(treeNode);
         }
-
-        rootNode.setExpanded(true);
-
-        localExplorer.setRoot(rootNode);
     }
 }
