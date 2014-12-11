@@ -1,0 +1,13 @@
+language: java
+
+after_success:
+  - mvn clean cobertura:cobertura coveralls:report
+
+notifications:
+  email:
+    - k2r79@hotmail.fr
+    - mailys.airouche@gmail.com
+    - vermerschth@gmail.com
+    - arthur.lambert@epsi.fr
+  on_success: change
+  on_failure: always
