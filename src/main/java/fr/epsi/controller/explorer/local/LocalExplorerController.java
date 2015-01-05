@@ -41,7 +41,7 @@ public class LocalExplorerController {
     public void generateChildNodes(TreeItem<String> rootNode) {
         File[] rootDirectories = FileSystemView.getFileSystemView().getRoots();
         for (File rootDirectory : rootDirectories) {
-            FileTreeViewItem treeNode = new FileTreeViewItem(rootDirectory.toPath());
+            FileTreeViewItem treeNode = new FileTreeViewItem(rootDirectory);
             rootNode.getChildren().add(treeNode);
         }
     }
