@@ -36,13 +36,8 @@ public class FileTreeViewItem extends TreeItem<String> {
             }
         }
 
-        try {
-            for (File subFile : this.file.listFiles()) {
-                TreeItem<String> treeNode = new TreeItem<String>(subFile.getName());
-                this.getChildren().add(treeNode);
-            }
-        } catch (NullPointerException exception) {
-            this.getChildren().add(new TreeItem<String>("Vide"));
+        if (this.file.listFiles() != null) {
+            this.getChildren().add(new TreeItem<String>());
         }
     }
 
@@ -56,15 +51,15 @@ public class FileTreeViewItem extends TreeItem<String> {
     }
 
     public void prepareChildNodes() {
+        if (this.getChildren().size() < 1) {
+            return;
+        }
+
         this.getChildren().clear();
 
-        try {
-            for (File subFile : this.file.listFiles()) {
-                FileTreeViewItem treeNode = new FileTreeViewItem(subFile);
-                this.getChildren().add(treeNode);
-            }
-        } catch (NullPointerException exception) {
-            this.getChildren().add(new TreeItem<String>("Vide"));
+        for (File subFile : this.file.listFiles()) {
+            FileTreeViewItem treeNode = new FileTreeViewItem(subFile);
+            this.getChildren().add(treeNode);
         }
     }
 }

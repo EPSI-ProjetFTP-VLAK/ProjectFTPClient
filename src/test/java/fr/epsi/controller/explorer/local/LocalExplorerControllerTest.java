@@ -15,6 +15,7 @@ import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(FileSystemView.class)
@@ -77,9 +78,13 @@ public class LocalExplorerControllerTest {
     public void testExpandedChildNodeoPreparation() throws Exception {
         ((FileTreeViewItem) rootNode.getChildren().get(0)).prepareChildNodes();
         assertEquals(testRoots[0].listFiles()[0].getName(), rootNode.getChildren().get(0).getChildren().get(0).getValue());
+        assertTrue(rootNode.getChildren().get(0).getChildren().get(0).isLeaf());
+
         assertEquals(testRoots[0].listFiles()[1].getName(), rootNode.getChildren().get(0).getChildren().get(1).getValue());
+        assertTrue(rootNode.getChildren().get(0).getChildren().get(1).isLeaf());
 
         ((FileTreeViewItem) rootNode.getChildren().get(1)).prepareChildNodes();
-        assertEquals("Vide", rootNode.getChildren().get(1).getChildren().get(0).getValue());
+        assertEquals(0, rootNode.getChildren().get(1).getChildren().size());
+        assertTrue(rootNode.getChildren().get(1).isLeaf());
     }
 }
