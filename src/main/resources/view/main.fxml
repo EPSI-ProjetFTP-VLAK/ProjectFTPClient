@@ -16,8 +16,8 @@
         </VBox>
     </HBox>
 
-    <HBox>
-
+    <HBox alignment="BOTTOM_CENTER" maxWidth="Infinity" HBox.hgrow="ALWAYS">
+        <fx:include source="transfer/queue.fxml" />
     </HBox>
 
 </VBox>

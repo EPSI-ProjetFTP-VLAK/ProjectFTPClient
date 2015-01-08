@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import fr.epsi.widgets.transfer.TransferQueue?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.layout.*?>
+<GridPane alignment="center" maxWidth="Infinity" HBox.hgrow="ALWAYS"
+          xmlns="http://javafx.com/javafx/8"
+          xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="fr.epsi.controller.transfer.queue.TransferQueueController">
+    <children>
+        <VBox fx:id="transferQueueContainer" GridPane.columnIndex="0"
+              GridPane.columnSpan="1"
+              GridPane.hgrow="ALWAYS"
+              GridPane.vgrow="ALWAYS"
+              GridPane.rowIndex="0">
+            <TransferQueue fx:id="transferQueue"
+                           GridPane.columnIndex="0"
+                           GridPane.columnSpan="1"
+                           GridPane.hgrow="ALWAYS"
+                           GridPane.vgrow="ALWAYS"
+                           GridPane.rowIndex="0">
+                <columns>
+                    <TableColumn text="Fichier">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="filename" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Progression">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="progress" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Débit">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="bandwith" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Taille">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="taille" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Destination">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="path" />
+                        </cellValueFactory>
+                    </TableColumn>
+                </columns>
+            </TransferQueue>
+        </VBox>
+    </children>
+
+    <padding>
+        <Insets bottom="7.0" left="7.0" right="7.0" top="3.0" />
+    </padding>
+
+</GridPane>
