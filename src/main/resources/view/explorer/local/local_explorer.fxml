@@ -9,8 +9,8 @@
           xmlns:fx="http://javafx.com/fxml/1"
           fx:controller="fr.epsi.controller.explorer.local.LocalExplorerController">
    <children>
-        <VBox fx:id="remoteExplorerContainer" maxWidth="Infinity" HBox.hgrow="ALWAYS">
-            <TreeView fx:id="remoteExplorer" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+        <VBox fx:id="localExplorerContainer" maxWidth="Infinity" HBox.hgrow="ALWAYS">
+            <TreeView fx:id="localExplorer" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
         </VBox>
    </children>
 

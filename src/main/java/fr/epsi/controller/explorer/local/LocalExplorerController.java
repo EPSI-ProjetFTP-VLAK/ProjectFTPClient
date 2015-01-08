@@ -11,8 +11,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public class LocalExplorerController {
-    public VBox remoteExplorerContainer;
-    public TreeView<String> remoteExplorer;
+    public VBox localExplorerContainer;
+    public TreeView<String> localExplorer;
 
     public void initialize() {
         TreeItem<String> rootNode = generateRootNode();
@@ -20,7 +20,7 @@ public class LocalExplorerController {
 
         generateChildNodes(rootNode);
 
-        remoteExplorer.setRoot(rootNode);
+        localExplorer.setRoot(rootNode);
     }
 
     public TreeItem<String> generateRootNode() {
