@@ -1,9 +1,12 @@
 package fr.epsi.controller.explorer.local;
 
-import fr.epsi.widgets.FileTreeViewItem;
+import fr.epsi.widgets.FileTreeCell;
+import fr.epsi.widgets.FileTreeItem;
+import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
@@ -20,6 +23,12 @@ public class LocalExplorerController {
 
         generateChildNodes(rootNode);
 
+        localExplorer.setCellFactory(new Callback<TreeView<String>, TreeCell<String>>() {
+            @Override
+            public TreeCell<String> call(TreeView<String> p) {
+                return new FileTreeCell();
+            }
+        });
         localExplorer.setRoot(rootNode);
     }
 
@@ -41,7 +50,7 @@ public class LocalExplorerController {
     public void generateChildNodes(TreeItem<String> rootNode) {
         File[] rootDirectories = FileSystemView.getFileSystemView().getRoots();
         for (File rootDirectory : rootDirectories) {
-            FileTreeViewItem treeNode = new FileTreeViewItem(rootDirectory);
+            FileTreeItem treeNode = new FileTreeItem(rootDirectory);
             rootNode.getChildren().add(treeNode);
         }
     }

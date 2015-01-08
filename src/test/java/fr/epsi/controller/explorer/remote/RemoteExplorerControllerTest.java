@@ -1,6 +1,6 @@
 package fr.epsi.controller.explorer.remote;
 
-import fr.epsi.widgets.FileTreeViewItem;
+import fr.epsi.widgets.FileTreeItem;
 import javafx.scene.control.TreeItem;
 import org.junit.After;
 import org.junit.Before;
@@ -76,14 +76,14 @@ public class RemoteExplorerControllerTest {
 
     @Test
     public void testExpandedChildNodeoPreparation() throws Exception {
-        ((FileTreeViewItem) rootNode.getChildren().get(0)).prepareChildNodes();
+        ((FileTreeItem) rootNode.getChildren().get(0)).prepareChildNodes();
         assertEquals(testRoots[0].listFiles()[0].getName(), rootNode.getChildren().get(0).getChildren().get(0).getValue());
         assertTrue(rootNode.getChildren().get(0).getChildren().get(0).isLeaf());
 
         assertEquals(testRoots[0].listFiles()[1].getName(), rootNode.getChildren().get(0).getChildren().get(1).getValue());
         assertTrue(rootNode.getChildren().get(0).getChildren().get(1).isLeaf());
 
-        ((FileTreeViewItem) rootNode.getChildren().get(1)).prepareChildNodes();
+        ((FileTreeItem) rootNode.getChildren().get(1)).prepareChildNodes();
         assertEquals(0, rootNode.getChildren().get(1).getChildren().size());
         assertTrue(rootNode.getChildren().get(1).isLeaf());
     }

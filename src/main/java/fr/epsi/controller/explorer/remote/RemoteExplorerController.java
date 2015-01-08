@@ -1,6 +1,6 @@
 package fr.epsi.controller.explorer.remote;
 
-import fr.epsi.widgets.FileTreeViewItem;
+import fr.epsi.widgets.FileTreeItem;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.VBox;
@@ -41,7 +41,7 @@ public class RemoteExplorerController {
     public void generateChildNodes(TreeItem<String> rootNode) {
         File[] rootDirectories = FileSystemView.getFileSystemView().getRoots();
         for (File rootDirectory : rootDirectories) {
-            FileTreeViewItem treeNode = new FileTreeViewItem(rootDirectory);
+            FileTreeItem treeNode = new FileTreeItem(rootDirectory);
             rootNode.getChildren().add(treeNode);
         }
     }

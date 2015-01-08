@@ -6,10 +6,10 @@ import javafx.scene.control.TreeItem;
 
 import java.io.File;
 
-public class FileTreeViewItem extends TreeItem<String> {
+public class FileTreeItem extends TreeItem<String> {
     private File file;
 
-    public FileTreeViewItem(File file) {
+    public FileTreeItem(File file) {
         super(file.toString());
         this.file = file;
 
@@ -58,7 +58,7 @@ public class FileTreeViewItem extends TreeItem<String> {
         this.getChildren().clear();
 
         for (File subFile : this.file.listFiles()) {
-            FileTreeViewItem treeNode = new FileTreeViewItem(subFile);
+            FileTreeItem treeNode = new FileTreeItem(subFile);
             this.getChildren().add(treeNode);
         }
     }
