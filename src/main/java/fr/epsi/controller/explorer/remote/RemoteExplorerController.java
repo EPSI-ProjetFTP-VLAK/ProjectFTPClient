@@ -1,4 +1,4 @@
-package fr.epsi.controller.explorer.local;
+package fr.epsi.controller.explorer.remote;
 
 import fr.epsi.widgets.FileTreeViewItem;
 import javafx.scene.control.TreeItem;
@@ -10,7 +10,7 @@ import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-public class LocalExplorerController {
+public class RemoteExplorerController {
     public VBox remoteExplorerContainer;
     public TreeView<String> remoteExplorer;
 

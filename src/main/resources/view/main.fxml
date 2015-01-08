@@ -1,12 +1,23 @@
-<?import javafx.scene.layout.BorderPane?>
-<BorderPane fx:controller="fr.epsi.controller.MainController"
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<VBox fx:controller="fr.epsi.controller.MainController"
           xmlns:fx="http://javafx.com/fxml">
-    <top>
+
+    <HBox alignment="TOP_CENTER">
         <fx:include source="connection/connection.fxml" />
-    </top>
+    </HBox>
 
-    <left>
-        <fx:include source="explorer/local/local_explorer.fxml" />
-    </left>
+    <HBox alignment="CENTER" maxWidth="Infinity">
+        <VBox alignment="CENTER_LEFT" maxWidth="Infinity" HBox.hgrow="ALWAYS">
+            <fx:include source="explorer/local/local_explorer.fxml" />
+        </VBox>
+        <VBox alignment="CENTER_RIGHT" maxWidth="Infinity" HBox.hgrow="ALWAYS">
+            <fx:include source="explorer/remote/remote_explorer.fxml" />
+        </VBox>
+    </HBox>
 
-</BorderPane>
+    <HBox>
+
+    </HBox>
+
+</VBox>

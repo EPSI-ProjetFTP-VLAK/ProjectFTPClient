@@ -14,7 +14,7 @@ public class Main extends Application {
 
         primaryStage.setTitle("FTP Client");
 
-        Scene mainScene = new Scene(root, 1000, 800);
+        Scene mainScene = new Scene(root, 800, 800);
 
         primaryStage.setScene(mainScene);
         primaryStage.show();
