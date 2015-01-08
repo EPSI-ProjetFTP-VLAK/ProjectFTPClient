@@ -1,10 +1,10 @@
-package fr.epsi.controller.explorer.remote;
+package fr.epsi.widgets.explorer;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class RemoteExplorerControllerTest {
+public class RemoteExplorerTest {
 
     @Before
     public void setUp() throws Exception {
@@ -17,7 +17,7 @@ public class RemoteExplorerControllerTest {
     }
 
     @Test
-    public void testGenerateRootNode() throws Exception {
+    public void testGenerateChildNodes() throws Exception {
 
     }
 }

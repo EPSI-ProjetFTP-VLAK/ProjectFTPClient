@@ -1,4 +1,4 @@
-package fr.epsi.widgets;
+package fr.epsi.widgets.explorer;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -18,14 +18,14 @@ public class FileTreeItem extends TreeItem<String> {
     }
 
     private void setParameters() {
-        if(this.file.isDirectory()) {
+        if(file.isDirectory()) {
             setExpanded(false);
             //TODO ajouter image setGraphic(new ImageView(folderCollapseImage));
         } else {
             //TODO ajouter image setGraphic(new ImageView(fileImage));
         }
 
-        if(!this.file.toPath().toString().endsWith(File.separator)) {
+        if(!file.toPath().toString().endsWith(File.separator)) {
             String value = file.toString();
             int indexOf = value.lastIndexOf(File.separator);
 
@@ -36,8 +36,8 @@ public class FileTreeItem extends TreeItem<String> {
             }
         }
 
-        if (this.file.listFiles() != null) {
-            this.getChildren().add(new TreeItem<String>());
+        if (file.listFiles() != null) {
+            getChildren().add(new TreeItem<String>());
         }
     }
 
