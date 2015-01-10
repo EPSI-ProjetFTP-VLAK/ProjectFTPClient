@@ -9,8 +9,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class ConnectionService extends Service<Void>
-{
+public class ConnectionService extends Service<Void> {
     private String host;
     private String username;
     private String password;
@@ -38,12 +37,13 @@ public class ConnectionService extends Service<Void>
             @Override
             protected Void call() throws Exception {
                 try {
-                    socket = new Socket(host, port);
+                    socket = createSocket();
+                    System.out.println(socket.isConnected() ? "Succès de la connexion" : "Échec de la connexion");
 
-                    in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    in = getSocketBufferedReader();
                     System.out.println(in.readLine());
 
-                    out = new PrintWriter(socket.getOutputStream());
+                    out = getSocketPrintWriter();
                     out.println(username + " " + password);
                     out.flush();
 
@@ -55,6 +55,18 @@ public class ConnectionService extends Service<Void>
                 return null;
             }
         };
+    }
+
+    public Socket createSocket() throws IOException {
+        return new Socket(host, port);
+    }
+
+    public BufferedReader getSocketBufferedReader() throws IOException {
+        return new BufferedReader(new InputStreamReader(socket.getInputStream()));
+    }
+
+    public PrintWriter getSocketPrintWriter() throws IOException {
+        return new PrintWriter(socket.getOutputStream());
     }
 
     public void setHost(String host) {

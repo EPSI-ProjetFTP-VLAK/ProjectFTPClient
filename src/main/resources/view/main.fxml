@@ -1,11 +1,25 @@
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.*?>
 <VBox fx:controller="fr.epsi.controller.MainController"
           xmlns:fx="http://javafx.com/fxml">
 
-    <HBox alignment="TOP_CENTER">
-        <fx:include source="connection/connection.fxml" />
-    </HBox>
+    <VBox alignment="TOP_CENTER">
+        <HBox alignment="TOP_CENTER">
+            <fx:include source="connection/connection.fxml" />
+        </HBox>
+        <HBox alignment="BOTTOM_CENTER"
+              VBox.vgrow="ALWAYS">
+            <TextArea fx:id="console"
+                       minHeight="100"
+                       editable="false"
+                       HBox.hgrow="ALWAYS"/>
+        </HBox>
+
+        <padding>
+            <Insets bottom="0.0" left="7.0" right="7.0" top="5.0" />
+        </padding>
+    </VBox>
 
     <HBox alignment="CENTER" maxWidth="Infinity">
         <VBox alignment="CENTER_LEFT" maxWidth="Infinity" HBox.hgrow="ALWAYS">

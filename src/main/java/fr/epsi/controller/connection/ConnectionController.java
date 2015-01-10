@@ -3,17 +3,27 @@ package fr.epsi.controller.connection;
 import fr.epsi.controller.MainController;
 import fr.epsi.service.connection.ConnectionService;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 public class ConnectionController
 {
-    public TextField host;
-    public TextField username;
-    public PasswordField password;
-    public TextField port;
-    public Button connect;
+    @FXML
+    private TextField host;
+
+    @FXML
+    private TextField username;
+
+    @FXML
+    private PasswordField password;
+
+    @FXML
+    private TextField port;
+
+    @FXML
+    private Button connect;
 
     public void connect(ActionEvent actionEvent)
     {
