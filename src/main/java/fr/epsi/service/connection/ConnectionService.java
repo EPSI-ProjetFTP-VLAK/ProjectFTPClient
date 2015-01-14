@@ -2,6 +2,7 @@ package fr.epsi.service.connection;
 
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.scene.control.TextArea;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,6 +11,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ConnectionService extends Service<Void> {
+    private TextArea console;
+
     private String host;
     private String username;
     private String password;
@@ -19,15 +22,17 @@ public class ConnectionService extends Service<Void> {
     private BufferedReader in;
     private PrintWriter out;
 
-    public ConnectionService() {
+    public ConnectionService(TextArea console) {
+        this.console = console;
     }
 
-    public ConnectionService(String host, String username, String password, int port)
+    public ConnectionService(String host, String username, String password, int port, TextArea console)
     {
         this.host = host;
         this.username = username;
         this.password = password;
         this.port = port;
+        this.console = console;
     }
 
     @Override
@@ -36,21 +41,19 @@ public class ConnectionService extends Service<Void> {
         return new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                try {
-                    socket = createSocket();
-                    System.out.println(socket.isConnected() ? "Succès de la connexion" : "Échec de la connexion");
+                console.appendText("Initializing connection...\n");
 
-                    in = getSocketBufferedReader();
-                    System.out.println(in.readLine());
+                socket = createSocket();
+                console.appendText(socket.isConnected() ? "Connection successful !\n" : "Failed to connect to server !\n");
 
-                    out = getSocketPrintWriter();
-                    out.println(username + " " + password);
-                    out.flush();
+                in = getSocketBufferedReader();
+                System.out.println(in.readLine());
 
-                    socket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                out = getSocketPrintWriter();
+                out.println(username + " " + password);
+                out.flush();
+
+                socket.close();
 
                 return null;
             }
@@ -83,5 +86,13 @@ public class ConnectionService extends Service<Void> {
 
     public void setPort(int port) {
         this.port = port;
+    }
+
+    public TextArea getConsole() {
+        return console;
+    }
+
+    public void setConsole(TextArea console) {
+        this.console = console;
     }
 }

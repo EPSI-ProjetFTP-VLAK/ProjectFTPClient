@@ -12,7 +12,7 @@ public class MainController
     private TextArea console;
 
     public MainController() {
-        connectionService = new ConnectionService();
+        connectionService = new ConnectionService(console);
     }
 
     public static ConnectionService getConnectionService() {

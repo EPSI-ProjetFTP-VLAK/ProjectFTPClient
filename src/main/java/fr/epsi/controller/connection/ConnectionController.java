@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 public class ConnectionController
@@ -27,6 +28,8 @@ public class ConnectionController
 
     public void connect(ActionEvent actionEvent)
     {
+        appendToConsole("Initializing connection...");
+
         String host = this.host.getText();
         String username = this.username.getText();
         String password = this.password.getText();
@@ -39,5 +42,9 @@ public class ConnectionController
         connectionService.setPort(port);
 
         connectionService.start();
+    }
+
+    private void appendToConsole(String text) {
+        ((TextArea) connect.getScene().lookup("#console")).appendText(text);
     }
 }

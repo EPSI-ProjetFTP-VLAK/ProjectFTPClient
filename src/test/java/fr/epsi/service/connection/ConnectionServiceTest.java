@@ -1,6 +1,7 @@
 package fr.epsi.service.connection;
 
 import javafx.application.Platform;
+import javafx.scene.control.TextArea;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +19,7 @@ import java.net.Socket;
 @PrepareForTest(Platform.class)
 @RunWith(PowerMockRunner.class)
 public class ConnectionServiceTest {
+    private TextArea mockedConsole;
     private Socket mockedSocket;
     private BufferedReader mockedBufferedReader;
     private PrintWriter mockedPrintWriter;
@@ -25,6 +27,8 @@ public class ConnectionServiceTest {
 
     @Before
     public void setUp() throws Exception {
+        mockedConsole = Mockito.mock(TextArea.class);
+
         mockedBufferedReader = Mockito.mock(BufferedReader.class);
         Mockito.doReturn("Welcome").when(mockedBufferedReader).readLine();
 
@@ -33,7 +37,7 @@ public class ConnectionServiceTest {
         mockedSocket = Mockito.spy(new Socket());
         Mockito.doReturn(true).when(mockedSocket).isConnected();
 
-        mockedConnectionService = Mockito.spy(new ConnectionService());
+        mockedConnectionService = Mockito.spy(new ConnectionService(mockedConsole));
         Mockito.doReturn(mockedSocket).when(mockedConnectionService).createSocket();
         Mockito.doReturn(mockedBufferedReader).when(mockedConnectionService).getSocketBufferedReader();
         Mockito.doReturn(mockedPrintWriter).when(mockedConnectionService).getSocketPrintWriter();
@@ -58,10 +62,14 @@ public class ConnectionServiceTest {
         while (!mockedSocket.isClosed()) {}
 
         try {
-            Mockito.verify(mockedBufferedReader).readLine();
+            Mockito.verify(mockedBufferedReader, Mockito.times(1)).readLine();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        Mockito.verify(mockedConsole).appendText("Initializing connection...\n");
+        Mockito.verify(mockedConsole).appendText("Connection successful !\n");
+        Mockito.verify(mockedConsole, Mockito.never()).appendText("Failed to connect to server !\n");
 
         Mockito.verify(mockedPrintWriter).println("user password");
         Mockito.verify(mockedPrintWriter).flush();
