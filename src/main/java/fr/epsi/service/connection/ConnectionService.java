@@ -1,5 +1,6 @@
 package fr.epsi.service.connection;
 
+import fr.epsi.controller.connection.ConnectionState;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.scene.control.TextArea;
@@ -41,11 +42,26 @@ public class ConnectionService extends Service<Void> {
         return new Task<Void>() {
             @Override
             protected Void call() throws Exception {
+                connect();
+                authenticate();
+
+                while (!isCancelled()) {}
+
+                disconnect();
+
+                return null;
+            }
+
+            private void connect() throws IOException {
                 console.appendText("Initializing connection...\n");
 
                 socket = createSocket();
                 console.appendText(socket.isConnected() ? "Connection successful !\n" : "Failed to connect to server !\n");
 
+                updateMessage(ConnectionState.CONNECTED.toString());
+            }
+
+            private void authenticate() throws IOException {
                 in = getSocketBufferedReader();
                 System.out.println(in.readLine());
 
@@ -53,9 +69,22 @@ public class ConnectionService extends Service<Void> {
                 out.println(username + " " + password);
                 out.flush();
 
-                socket.close();
+                updateMessage(ConnectionState.AUTHENTICATED.toString());
+            }
 
-                return null;
+            private void disconnect() {
+                console.appendText("Disconnecting...");
+
+                out.println("exit");
+                out.flush();
+
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                updateMessage(ConnectionState.DISCONNECTED.toString());
             }
         };
     }

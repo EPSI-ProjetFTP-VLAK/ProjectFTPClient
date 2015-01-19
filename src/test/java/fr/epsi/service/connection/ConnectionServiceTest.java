@@ -1,5 +1,6 @@
 package fr.epsi.service.connection;
 
+import fr.epsi.controller.connection.ConnectionState;
 import javafx.application.Platform;
 import javafx.scene.control.TextArea;
 import org.junit.After;
@@ -48,7 +49,14 @@ public class ConnectionServiceTest {
 
     @After
     public void tearDown() throws Exception {
+        mockedConnectionService.cancel();
+        while (!mockedConnectionService.getMessage().equals(ConnectionState.DISCONNECTED.toString())) {}
 
+        Mockito.verify(mockedPrintWriter).println("exit");
+        Mockito.verify(mockedPrintWriter, Mockito.times(2)).flush();
+
+        Mockito.verify(mockedConsole).appendText("Disconnecting...");
+        Mockito.verify(mockedSocket).close();
     }
 
     @Test
@@ -59,7 +67,9 @@ public class ConnectionServiceTest {
         mockedConnectionService.setPort(4000);
 
         mockedConnectionService.start();
-        while (!mockedSocket.isClosed()) {}
+
+        while (!mockedConnectionService.getMessage().equals(ConnectionState.CONNECTED.toString())) {}
+        while (!mockedConnectionService.getMessage().equals(ConnectionState.AUTHENTICATED.toString())) {}
 
         try {
             Mockito.verify(mockedBufferedReader, Mockito.times(1)).readLine();
