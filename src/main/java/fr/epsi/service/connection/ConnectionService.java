@@ -1,6 +1,6 @@
 package fr.epsi.service.connection;
 
-import javafx.concurrent.Service;
+import fr.epsi.service.FTPService;
 import javafx.concurrent.Task;
 import javafx.scene.control.TextArea;
 
@@ -10,31 +10,17 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class ConnectionService extends Service<Void> {
-    private TextArea console;
-
+public class ConnectionService extends FTPService {
     private String host;
     private String username;
     private String password;
     private int port;
 
-    private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
 
     public ConnectionService(Socket socket, TextArea console) {
-        this.socket = socket;
-        this.console = console;
-    }
-
-    public ConnectionService(String host, String username, String password, int port, Socket socket, TextArea console)
-    {
-        this.host = host;
-        this.username = username;
-        this.password = password;
-        this.port = port;
-        this.socket = socket;
-        this.console = console;
+        super(socket, console);
     }
 
     @Override
@@ -52,6 +38,7 @@ public class ConnectionService extends Service<Void> {
                     disconnect();
                 } catch (Exception e) {
                     console.appendText(e.getMessage() + " !");
+                    e.printStackTrace();
                 }
 
                 return null;
