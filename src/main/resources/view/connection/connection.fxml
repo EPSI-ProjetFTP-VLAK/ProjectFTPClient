@@ -9,10 +9,10 @@
           fx:controller="fr.epsi.controller.connection.ConnectionController">
    <children>
         <TextField fx:id="host" promptText="Hôte..." />
-        <TextField fx:id="username" promptText="Username..." GridPane.columnIndex="1" />
-        <PasswordField fx:id="password" promptText="Password..." GridPane.columnIndex="2" />
+        <TextField fx:id="username" promptText="Utilisateur..." GridPane.columnIndex="1" />
+        <PasswordField fx:id="password" promptText="Mot de passe..." GridPane.columnIndex="2" />
         <TextField fx:id="port" prefWidth="80.0" promptText="Port..." GridPane.columnIndex="3" />
-        <Button fx:id="connect" mnemonicParsing="false" text="Connect" GridPane.columnIndex="4" onAction="#connect" />
+        <Button fx:id="connectionButton" mnemonicParsing="false" text="Connection" GridPane.columnIndex="4" onAction="#connect" />
    </children>
 
    <padding>
