@@ -22,16 +22,18 @@ public class ConnectionService extends Service<Void> {
     private BufferedReader in;
     private PrintWriter out;
 
-    public ConnectionService(TextArea console) {
+    public ConnectionService(Socket socket, TextArea console) {
+        this.socket = socket;
         this.console = console;
     }
 
-    public ConnectionService(String host, String username, String password, int port, TextArea console)
+    public ConnectionService(String host, String username, String password, int port, Socket socket, TextArea console)
     {
         this.host = host;
         this.username = username;
         this.password = password;
         this.port = port;
+        this.socket = socket;
         this.console = console;
     }
 
@@ -45,12 +47,11 @@ public class ConnectionService extends Service<Void> {
                     connect();
                     authenticate();
 
-                    while (!isCancelled()) {
-                    }
+                    while (!isCancelled()) {}
 
                     disconnect();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    console.appendText(e.getMessage() + " !");
                 }
 
                 return null;
@@ -123,13 +124,5 @@ public class ConnectionService extends Service<Void> {
 
     public void setPort(int port) {
         this.port = port;
-    }
-
-    public TextArea getConsole() {
-        return console;
-    }
-
-    public void setConsole(TextArea console) {
-        this.console = console;
     }
 }

@@ -30,14 +30,14 @@ public class ConnectionServiceTest {
         mockedConsole = Mockito.mock(TextArea.class);
 
         mockedBufferedReader = Mockito.mock(BufferedReader.class);
-        Mockito.doReturn("Welcome").doReturn("auth : ok").when(mockedBufferedReader).readLine();
+        Mockito.doReturn("Welcome").doReturn("AUTH : OK").when(mockedBufferedReader).readLine();
 
         mockedPrintWriter = Mockito.mock(PrintWriter.class);
 
         mockedSocket = Mockito.spy(new Socket());
         Mockito.doReturn(true).when(mockedSocket).isConnected();
 
-        mockedConnectionService = Mockito.spy(new ConnectionService(mockedConsole));
+        mockedConnectionService = Mockito.spy(new ConnectionService(mockedSocket, mockedConsole));
         Mockito.doReturn(mockedSocket).when(mockedConnectionService).createSocket();
         Mockito.doReturn(mockedBufferedReader).when(mockedConnectionService).getSocketBufferedReader();
         Mockito.doReturn(mockedPrintWriter).when(mockedConnectionService).getSocketPrintWriter();
