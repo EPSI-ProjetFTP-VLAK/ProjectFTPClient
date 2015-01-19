@@ -1,4 +1,4 @@
-package fr.epsi.controller.connection;
+package fr.epsi.service.connection;
 
 public enum ConnectionState {
     /**

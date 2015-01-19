@@ -1,6 +1,5 @@
 package fr.epsi.service.connection;
 
-import fr.epsi.controller.connection.ConnectionState;
 import javafx.application.Platform;
 import javafx.scene.control.TextArea;
 import org.junit.After;
@@ -31,7 +30,7 @@ public class ConnectionServiceTest {
         mockedConsole = Mockito.mock(TextArea.class);
 
         mockedBufferedReader = Mockito.mock(BufferedReader.class);
-        Mockito.doReturn("Welcome").when(mockedBufferedReader).readLine();
+        Mockito.doReturn("Welcome").doReturn("auth : ok").when(mockedBufferedReader).readLine();
 
         mockedPrintWriter = Mockito.mock(PrintWriter.class);
 
@@ -72,13 +71,14 @@ public class ConnectionServiceTest {
         while (!mockedConnectionService.getMessage().equals(ConnectionState.AUTHENTICATED.toString())) {}
 
         try {
-            Mockito.verify(mockedBufferedReader, Mockito.times(1)).readLine();
+            Mockito.verify(mockedBufferedReader, Mockito.times(2)).readLine();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         Mockito.verify(mockedConsole).appendText("Initializing connection...\n");
         Mockito.verify(mockedConsole).appendText("Connection successful !\n");
+        Mockito.verify(mockedConsole).appendText("Welcome\n");
         Mockito.verify(mockedConsole, Mockito.never()).appendText("Failed to connect to server !\n");
 
         Mockito.verify(mockedPrintWriter).println("user password");

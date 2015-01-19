@@ -1,6 +1,5 @@
 package fr.epsi.service.connection;
 
-import fr.epsi.controller.connection.ConnectionState;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.scene.control.TextArea;
@@ -42,17 +41,22 @@ public class ConnectionService extends Service<Void> {
         return new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                connect();
-                authenticate();
+                try {
+                    connect();
+                    authenticate();
 
-                while (!isCancelled()) {}
+                    while (!isCancelled()) {
+                    }
 
-                disconnect();
+                    disconnect();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 return null;
             }
 
-            private void connect() throws IOException {
+            private void connect() throws Exception {
                 console.appendText("Initializing connection...\n");
 
                 socket = createSocket();
@@ -61,28 +65,32 @@ public class ConnectionService extends Service<Void> {
                 updateMessage(ConnectionState.CONNECTED.toString());
             }
 
-            private void authenticate() throws IOException {
+            private void authenticate() throws Exception {
                 in = getSocketBufferedReader();
-                System.out.println(in.readLine());
+                console.appendText(in.readLine() + "\n");
 
                 out = getSocketPrintWriter();
                 out.println(username + " " + password);
                 out.flush();
 
+                String authResponse = in.readLine();
+                console.appendText(authResponse + "\n");
+
+                if (!authResponse.equals("AUTH : OK")) {
+                    cancel();
+                    throw new Exception("Failed to authenticate !");
+                }
+
                 updateMessage(ConnectionState.AUTHENTICATED.toString());
             }
 
-            private void disconnect() {
+            private void disconnect() throws Exception {
                 console.appendText("Disconnecting...");
 
                 out.println("exit");
                 out.flush();
 
-                try {
-                    socket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                socket.close();
 
                 updateMessage(ConnectionState.DISCONNECTED.toString());
             }

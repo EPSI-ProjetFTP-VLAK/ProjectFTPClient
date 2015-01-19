@@ -57,6 +57,12 @@ public class ConnectionController
         connectionService.cancel();
 
         connectionButton.setText("Connection");
+        connectionButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                connect(actionEvent);
+            }
+        });
     }
 
     private void appendToConsole(String text) {
