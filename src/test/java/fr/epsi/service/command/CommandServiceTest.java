@@ -6,6 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -24,22 +26,22 @@ public class CommandServiceTest {
 
     @Before
     public void setUp() throws Exception {
-//        mockedConsole = Mockito.mock(TextArea.class);
-//
-//        mockedBufferedReader = Mockito.mock(BufferedReader.class);
-//        Mockito.doReturn("Welcome").doReturn("AUTH : OK").when(mockedBufferedReader).readLine();
-//
-//        mockedPrintWriter = Mockito.mock(PrintWriter.class);
-//
-//        mockedSocket = Mockito.spy(new Socket());
-//        Mockito.doReturn(true).when(mockedSocket).isConnected();
-//
-//        mockedCommandService = Mockito.spy(new CommandService(mockedSocket, mockedConsole));
-//        Mockito.doReturn(mockedBufferedReader).when(mockedCommandService).getSocketBufferedReader();
-//        Mockito.doReturn(mockedPrintWriter).when(mockedCommandService).getSocketPrintWriter();
-//
-//        PowerMockito.mockStatic(Platform.class);
-//        PowerMockito.when(Platform.isFxApplicationThread()).thenReturn(true);
+        mockedConsole = Mockito.mock(TextArea.class);
+
+        mockedBufferedReader = Mockito.mock(BufferedReader.class);
+        //Mockito.doReturn("Welcome").doReturn("AUTH : OK").when(mockedBufferedReader).readLine();
+
+        mockedPrintWriter = Mockito.mock(PrintWriter.class);
+
+        mockedSocket = Mockito.spy(new Socket());
+        Mockito.doReturn(true).when(mockedSocket).isConnected();
+
+        mockedCommandService = Mockito.spy(new CommandService(mockedSocket, mockedConsole));
+        Mockito.doReturn(mockedBufferedReader).when(mockedCommandService).getSocketBufferedReader();
+        Mockito.doReturn(mockedPrintWriter).when(mockedCommandService).getSocketPrintWriter();
+
+        PowerMockito.mockStatic(Platform.class);
+        PowerMockito.when(Platform.isFxApplicationThread()).thenReturn(true);
     }
 
     @After

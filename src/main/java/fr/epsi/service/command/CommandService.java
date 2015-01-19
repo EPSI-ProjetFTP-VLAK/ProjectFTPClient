@@ -1,6 +1,7 @@
 package fr.epsi.service.command;
 
 import fr.epsi.service.FTPService;
+import fr.epsi.service.connection.ConnectionState;
 import javafx.concurrent.Task;
 import javafx.scene.control.TextArea;
 
@@ -11,8 +12,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class CommandService extends FTPService {
-    private Socket socket;
-    private TextArea console;
 
     public CommandService(Socket socket, TextArea console) {
         super(socket, console);
@@ -23,15 +22,12 @@ public class CommandService extends FTPService {
         return new Task<Void>() {
             @Override
             protected Void call() throws Exception {
+                while (!isCancelled()) {
+                    
+                }
 
-                while (!isCancelled()) {}
-
-                console.appendText("Disconnecting...");
-
-//                out.println("exit");
-//                out.flush();
-
-                socket.close();
+                disconnect();
+                updateMessage(ConnectionState.DISCONNECTED.toString());
 
                 return null;
             }

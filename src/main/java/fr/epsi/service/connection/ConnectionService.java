@@ -19,6 +19,8 @@ public class ConnectionService extends FTPService {
     private BufferedReader in;
     private PrintWriter out;
 
+    public ConnectionService() {}
+
     public ConnectionService(Socket socket, TextArea console) {
         super(socket, console);
     }
@@ -36,6 +38,7 @@ public class ConnectionService extends FTPService {
                     while (!isCancelled()) {}
 
                     disconnect();
+                    updateMessage(ConnectionState.DISCONNECTED.toString());
                 } catch (Exception e) {
                     console.appendText(e.getMessage() + " !");
                     e.printStackTrace();
@@ -70,17 +73,6 @@ public class ConnectionService extends FTPService {
                 }
 
                 updateMessage(ConnectionState.AUTHENTICATED.toString());
-            }
-
-            private void disconnect() throws Exception {
-                console.appendText("Disconnecting...");
-
-                out.println("exit");
-                out.flush();
-
-                socket.close();
-
-                updateMessage(ConnectionState.DISCONNECTED.toString());
             }
         };
     }
