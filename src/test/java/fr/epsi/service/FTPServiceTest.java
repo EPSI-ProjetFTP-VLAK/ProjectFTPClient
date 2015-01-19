@@ -35,6 +35,8 @@ public abstract class FTPServiceTest {
         mockedPrintWriter = Mockito.mock(PrintWriter.class);
         mockedSocket = Mockito.spy(new Socket());
 
+        mockedService.setConsole(mockedConsole);
+
         Mockito.doReturn(true).when(mockedSocket).isConnected();
 
         Mockito.doReturn(mockedBufferedReader).when(mockedService).getSocketBufferedReader();
@@ -50,7 +52,7 @@ public abstract class FTPServiceTest {
         while (!mockedService.getMessage().equals(ConnectionState.DISCONNECTED.toString())) {}
 
         Mockito.verify(mockedPrintWriter).println("exit");
-        Mockito.verify(mockedPrintWriter, Mockito.times(2)).flush();
+        Mockito.verify(mockedPrintWriter, Mockito.atLeast(1)).flush();
 
         Mockito.verify(mockedConsole).appendText("Disconnecting...");
         Mockito.verify(mockedSocket).close();

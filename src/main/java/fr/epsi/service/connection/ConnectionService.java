@@ -69,7 +69,7 @@ public class ConnectionService extends FTPService {
 
                 if (!authResponse.equals("AUTH : OK")) {
                     cancel();
-                    throw new Exception("Failed to authenticate !");
+                    throw new Exception("Failed to authenticate");
                 }
 
                 updateMessage(ConnectionState.AUTHENTICATED.toString());
