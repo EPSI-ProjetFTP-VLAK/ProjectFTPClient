@@ -4,19 +4,33 @@ import javafx.event.EventHandler;
 import javafx.scene.control.TreeCell;
 import javafx.scene.input.*;
 
-public class FileTreeCell extends TreeCell<String> {
+public abstract class FileTreeCell extends TreeCell<String> {
 
     public FileTreeCell() {
+        setupClick();
         setupDragAndDrop();
 
         setStyle("-fx-background-color: transparent;");
     }
 
+    protected abstract void doOnDrag(MouseEvent mouseEvent);
+    protected abstract void doOnDrop(DragEvent dragEvent);
+    protected abstract void doOnClick(MouseEvent mouseEvent);
+
+    private void setupClick() {
+        setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                doOnClick(mouseEvent);
+            }
+        });
+    }
+
     private void setupDragAndDrop() {
         setOnDragDetected(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(MouseEvent event) {
-                // TODO Événement du drag
+            public void handle(MouseEvent mouseEvent) {
+                doOnDrag(mouseEvent);
 
                 Dragboard db = startDragAndDrop(TransferMode.ANY);
 
@@ -24,15 +38,15 @@ public class FileTreeCell extends TreeCell<String> {
                 content.putString(getText());
                 db.setContent(content);
 
-                event.consume();
+                mouseEvent.consume();
             }
         });
 
         setOnDragDone(new EventHandler<DragEvent>() {
-            public void handle(DragEvent event) {
-                // TODO Implémenter l'événement du drop
+            public void handle(DragEvent dragEvent) {
+                doOnDrop(dragEvent);
 
-                event.consume();
+                dragEvent.consume();
             }
         });
     }

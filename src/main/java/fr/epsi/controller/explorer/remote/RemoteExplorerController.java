@@ -1,14 +1,19 @@
 package fr.epsi.controller.explorer.remote;
 
 import fr.epsi.widgets.explorer.RemoteExplorer;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.VBox;
 
-public class RemoteExplorerController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class RemoteExplorerController implements Initializable {
     public VBox remoteExplorerContainer;
     public RemoteExplorer remoteExplorer;
 
-    public void initialize() {
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         TreeItem<String> rootNode = generateRootNode();
         rootNode.setExpanded(true);
 

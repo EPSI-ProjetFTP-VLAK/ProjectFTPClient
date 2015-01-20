@@ -21,9 +21,14 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         connectionService = new ConnectionService(socket, console);
+        commandService = new CommandService(socket, console);
     }
 
     public static ConnectionService getConnectionService() {
         return connectionService;
+    }
+
+    public static CommandService getCommandService() {
+        return commandService;
     }
 }

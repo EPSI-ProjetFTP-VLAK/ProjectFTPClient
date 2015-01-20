@@ -14,10 +14,13 @@ import java.net.Socket;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import static org.junit.Assert.assertEquals;
+
 @PrepareForTest(Platform.class)
 @RunWith(PowerMockRunner.class)
 public class CommandServiceTest extends FTPServiceTest {
     private Queue<FTPCommand> commandQueue;
+    private Queue<FTPCommand> commandHistory;
     private CommandService mockedCommandService;
 
     public CommandServiceTest() {
@@ -26,7 +29,10 @@ public class CommandServiceTest extends FTPServiceTest {
         mockedCommandService = (CommandService) mockedService;
 
         commandQueue = Mockito.spy(new LinkedList<FTPCommand>());
+        commandHistory = Mockito.spy(new LinkedList<FTPCommand>());
+
         mockedCommandService.setCommandQueue(commandQueue);
+        mockedCommandService.setCommandHistory(commandHistory);
     }
 
     @Before
@@ -49,6 +55,8 @@ public class CommandServiceTest extends FTPServiceTest {
 
         Mockito.verify(commandQueue, Mockito.times(1)).poll();
         Mockito.verify(mockedFtpCommand, Mockito.times(1)).execute(mockedSocket);
+
+        assertEquals(mockedFtpCommand, commandHistory.peek());
     }
 
     @Test
@@ -69,6 +77,10 @@ public class CommandServiceTest extends FTPServiceTest {
 
         for (FTPCommand ftpCommand : ftpCommands) {
             Mockito.verify(ftpCommand, Mockito.times(1)).execute(mockedSocket);
+        }
+
+        for (int i = 0; i < 5; i++) {
+            assertEquals(ftpCommands[i], commandHistory.poll());
         }
     }
 }

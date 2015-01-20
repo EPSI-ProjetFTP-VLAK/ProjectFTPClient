@@ -16,6 +16,7 @@ import java.util.Queue;
 public class CommandService extends FTPService {
 
     private Queue<FTPCommand> commandQueue;
+    private Queue<FTPCommand> commandHistory;
 
     public CommandService() {
     }
@@ -41,7 +42,10 @@ public class CommandService extends FTPService {
 
             private void executeNextCommand() {
                 if (commandQueue.size() > 0) {
-                    commandQueue.poll().execute(socket);
+                    FTPCommand ftpCommand = commandQueue.poll();
+                    ftpCommand.execute(socket);
+
+                    commandHistory.offer(ftpCommand);
                 }
             }
         };
@@ -61,5 +65,13 @@ public class CommandService extends FTPService {
 
     public Queue<FTPCommand> getCommandQueue() {
         return commandQueue;
+    }
+
+    public void setCommandHistory(Queue<FTPCommand> commandHistory) {
+        this.commandHistory = commandHistory;
+    }
+
+    public Queue<FTPCommand> getCommandHistory() {
+        return commandHistory;
     }
 }

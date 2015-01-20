@@ -1,6 +1,8 @@
 package fr.epsi.widgets.explorer;
 
 import javafx.scene.control.TreeItem;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseEvent;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +18,22 @@ public class AbstractExplorerTest {
 
     @Before
     public void setUp() throws Exception {
-        abstractExplorer = new AbstractExplorer() {};
+        abstractExplorer = new AbstractExplorer() {
+            @Override
+            public void doOnDrag(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void doOnDrop(DragEvent dragEvent) {
+
+            }
+
+            @Override
+            public void doOnClick(MouseEvent mouseEvent) {
+
+            }
+        };
 
         rootNode = new TreeItem<String>(HOSTNAME);
     }

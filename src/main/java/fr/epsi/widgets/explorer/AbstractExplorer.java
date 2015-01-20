@@ -6,6 +6,7 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.util.Callback;
 
@@ -16,11 +17,30 @@ public abstract class AbstractExplorer extends TreeView<String> {
         setupDragAndDrop();
     }
 
+    public abstract void doOnDrag(MouseEvent mouseEvent);
+    public abstract void doOnDrop(DragEvent dragEvent);
+    public abstract void doOnClick(MouseEvent mouseEvent);
+
     private void assignCellFactory() {
         setCellFactory(new Callback<TreeView<String>, TreeCell<String>>() {
             @Override
             public TreeCell<String> call(TreeView<String> p) {
-                return new FileTreeCell();
+                return new FileTreeCell() {
+                    @Override
+                    protected void doOnDrag(MouseEvent mouseEvent) {
+                        doOnDrag(mouseEvent);
+                    }
+
+                    @Override
+                    protected void doOnDrop(DragEvent dragEvent) {
+                        doOnDrop(dragEvent);
+                    }
+
+                    @Override
+                    protected void doOnClick(MouseEvent mouseEvent) {
+                        doOnClick(mouseEvent);
+                    }
+                };
             }
         });
     }

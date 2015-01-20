@@ -1,17 +1,21 @@
 package fr.epsi.controller.explorer.local;
 
 import fr.epsi.widgets.explorer.LocalExplorer;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.VBox;
 
 import java.net.InetAddress;
+import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.ResourceBundle;
 
-public class LocalExplorerController {
+public class LocalExplorerController implements Initializable {
     public VBox localExplorerContainer;
     public LocalExplorer localExplorer;
 
-    public void initialize() {
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         TreeItem<String> rootNode = generateRootNode();
         rootNode.setExpanded(true);
 
