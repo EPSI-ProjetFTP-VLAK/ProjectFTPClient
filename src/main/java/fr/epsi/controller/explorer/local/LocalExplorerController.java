@@ -20,12 +20,8 @@ public class LocalExplorerController implements Initializable {
         rootNode.setExpanded(true);
 
         localExplorer.setRoot(rootNode);
-
-        try {
-            localExplorer.generateChildNodes();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        localExplorer.getRoot().setExpanded(true);
+        localExplorer.initializeNodes();
     }
 
     public TreeItem<String> generateRootNode() {
@@ -36,7 +32,7 @@ public class LocalExplorerController implements Initializable {
             e.printStackTrace();
         }
 
-        return new TreeItem<String>(root);
+        return new TreeItem<>(root);
     }
 
     public String getHostName() throws UnknownHostException {

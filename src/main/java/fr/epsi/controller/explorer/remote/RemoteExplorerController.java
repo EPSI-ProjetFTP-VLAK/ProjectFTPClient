@@ -18,12 +18,6 @@ public class RemoteExplorerController implements Initializable {
         rootNode.setExpanded(true);
 
         remoteExplorer.setRoot(rootNode);
-
-        try {
-            remoteExplorer.generateChildNodes();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public TreeItem<String> generateRootNode() {

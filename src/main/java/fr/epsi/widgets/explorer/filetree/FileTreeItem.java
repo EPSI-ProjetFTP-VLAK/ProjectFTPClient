@@ -1,4 +1,4 @@
-package fr.epsi.widgets.explorer;
+package fr.epsi.widgets.explorer.filetree;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -6,8 +6,8 @@ import javafx.scene.control.TreeItem;
 
 import java.io.File;
 
-public class FileTreeItem extends TreeItem<String> {
-    private File file;
+public abstract class FileTreeItem extends TreeItem<String> {
+    protected File file;
 
     public FileTreeItem(File file) {
         super(file.toString());
@@ -16,6 +16,8 @@ public class FileTreeItem extends TreeItem<String> {
         setParameters();
         attachExpandedListener();
     }
+
+    public abstract void generateChildNodes();
 
     private void setParameters() {
         if(file.isDirectory()) {
@@ -45,21 +47,8 @@ public class FileTreeItem extends TreeItem<String> {
         this.expandedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                prepareChildNodes();
+                generateChildNodes();
             }
         });
-    }
-
-    public void prepareChildNodes() {
-        if (this.getChildren().size() < 1) {
-            return;
-        }
-
-        this.getChildren().clear();
-
-        for (File subFile : this.file.listFiles()) {
-            FileTreeItem treeNode = new FileTreeItem(subFile);
-            this.getChildren().add(treeNode);
-        }
     }
 }

@@ -1,6 +1,6 @@
 package fr.epsi.widgets.explorer;
 
-import javafx.scene.control.TreeItem;
+import fr.epsi.widgets.explorer.filetree.FileTreeItem;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,31 +9,17 @@ import org.mockito.Mockito;
 import java.io.File;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class FileTreeItemTest {
 
-    public static final String HOSTNAME = "test-computer";
-
-    private File[] testRoots;
-    private TreeItem<String> rootNode;
+    protected FileTreeItem fileTreeItem;
+    private File file;
 
     @Before
     public void setUp() throws Exception {
-        testRoots = new File[2];
 
-        File firstDirectoryMock = Mockito.spy(new File("test-directory-1"));
-        Mockito.doReturn(true).when(firstDirectoryMock).isDirectory();
-        Mockito.doReturn(new File[] { new File("test-file-1"), new File("test-file-2") }).when(firstDirectoryMock).listFiles();
-        testRoots[0] = firstDirectoryMock;
-
-        File secondDirectoryMock = Mockito.spy(new File("test-directory-2"));
-        Mockito.doReturn(true).when(secondDirectoryMock).isDirectory();
-        testRoots[1] = secondDirectoryMock;
-
-        rootNode = new TreeItem<String>(HOSTNAME);
-        rootNode.getChildren().add(new FileTreeItem(testRoots[0]));
-        rootNode.getChildren().add(new FileTreeItem(testRoots[1]));
     }
 
     @After
@@ -42,16 +28,38 @@ public class FileTreeItemTest {
     }
 
     @Test
-    public void testPrepareChildNodes() throws Exception {
-        ((FileTreeItem) rootNode.getChildren().get(0)).prepareChildNodes();
-        assertEquals(testRoots[0].listFiles()[0].getName(), rootNode.getChildren().get(0).getChildren().get(0).getValue());
-        assertTrue(rootNode.getChildren().get(0).getChildren().get(0).isLeaf());
+    public void testFile() throws Exception {
+        file = Mockito.spy(new File("test-file"));
+        Mockito.doReturn(false).when(file).isDirectory();
 
-        assertEquals(testRoots[0].listFiles()[1].getName(), rootNode.getChildren().get(0).getChildren().get(1).getValue());
-        assertTrue(rootNode.getChildren().get(0).getChildren().get(1).isLeaf());
+        fileTreeItem = new FileTreeItem(file) {
+            @Override
+            public void generateChildNodes() {
 
-        ((FileTreeItem) rootNode.getChildren().get(1)).prepareChildNodes();
-        assertEquals(0, rootNode.getChildren().get(1).getChildren().size());
-        assertTrue(rootNode.getChildren().get(1).isLeaf());
+            }
+        };
+
+        assertEquals("test-file", fileTreeItem.getValue());
+        assertTrue(fileTreeItem.getChildren().isEmpty());
+    }
+
+    @Test
+    public void testFolder() throws Exception {
+        file = Mockito.spy(new File("test-folder"));
+        File[] files = new File[] { new File("test-file-1"), new File("test-file-2") };
+
+        Mockito.doReturn(files).when(file).listFiles();
+        Mockito.doReturn(true).when(file).isDirectory();
+
+        fileTreeItem = new FileTreeItem(file) {
+            @Override
+            public void generateChildNodes() {
+
+            }
+        };
+
+        assertEquals("test-folder", fileTreeItem.getValue());
+        assertFalse(fileTreeItem.isExpanded());
+        assertFalse(fileTreeItem.getChildren().isEmpty());
     }
 }

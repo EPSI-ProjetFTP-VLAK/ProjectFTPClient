@@ -1,5 +1,7 @@
 package fr.epsi.widgets.explorer;
 
+import fr.epsi.widgets.explorer.filetree.FileTreeItem;
+import fr.epsi.widgets.explorer.filetree.local.LocalFileTreeItem;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 
@@ -13,28 +15,21 @@ public class LocalExplorer extends AbstractExplorer {
     }
 
     @Override
-    public void generateChildNodes() throws Exception {
-        super.generateChildNodes();
+    public void doOnFileDrag(MouseEvent mouseEvent) {
 
+    }
+
+    @Override
+    public void doOnFileDrop(DragEvent dragEvent) {
+
+    }
+
+    @Override
+    public void initializeNodes() {
         File[] rootDirectories = FileSystemView.getFileSystemView().getRoots();
         for (File rootDirectory : rootDirectories) {
-            FileTreeItem treeNode = new FileTreeItem(rootDirectory);
+            FileTreeItem treeNode = new LocalFileTreeItem(rootDirectory);
             getRoot().getChildren().add(treeNode);
         }
-    }
-
-    @Override
-    public void doOnDrag(MouseEvent mouseEvent) {
-
-    }
-
-    @Override
-    public void doOnDrop(DragEvent dragEvent) {
-
-    }
-
-    @Override
-    public void doOnClick(MouseEvent mouseEvent) {
-
     }
 }

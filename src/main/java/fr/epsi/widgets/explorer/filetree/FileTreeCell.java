@@ -1,4 +1,4 @@
-package fr.epsi.widgets.explorer;
+package fr.epsi.widgets.explorer.filetree;
 
 import javafx.event.EventHandler;
 import javafx.scene.control.TreeCell;
@@ -7,7 +7,6 @@ import javafx.scene.input.*;
 public abstract class FileTreeCell extends TreeCell<String> {
 
     public FileTreeCell() {
-        setupClick();
         setupDragAndDrop();
 
         setStyle("-fx-background-color: transparent;");
@@ -15,16 +14,6 @@ public abstract class FileTreeCell extends TreeCell<String> {
 
     protected abstract void doOnDrag(MouseEvent mouseEvent);
     protected abstract void doOnDrop(DragEvent dragEvent);
-    protected abstract void doOnClick(MouseEvent mouseEvent);
-
-    private void setupClick() {
-        setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                doOnClick(mouseEvent);
-            }
-        });
-    }
 
     private void setupDragAndDrop() {
         setOnDragDetected(new EventHandler<MouseEvent>() {

@@ -1,6 +1,7 @@
 package fr.epsi.widgets.explorer;
 
 import com.sun.javafx.scene.control.skin.TreeCellSkin;
+import fr.epsi.widgets.explorer.filetree.FileTreeCell;
 import javafx.event.EventHandler;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeView;
@@ -17,9 +18,9 @@ public abstract class AbstractExplorer extends TreeView<String> {
         setupDragAndDrop();
     }
 
-    public abstract void doOnDrag(MouseEvent mouseEvent);
-    public abstract void doOnDrop(DragEvent dragEvent);
-    public abstract void doOnClick(MouseEvent mouseEvent);
+    public abstract void doOnFileDrag(MouseEvent mouseEvent);
+    public abstract void doOnFileDrop(DragEvent dragEvent);
+    public abstract void initializeNodes();
 
     private void assignCellFactory() {
         setCellFactory(new Callback<TreeView<String>, TreeCell<String>>() {
@@ -28,17 +29,12 @@ public abstract class AbstractExplorer extends TreeView<String> {
                 return new FileTreeCell() {
                     @Override
                     protected void doOnDrag(MouseEvent mouseEvent) {
-                        doOnDrag(mouseEvent);
+                        doOnFileDrag(mouseEvent);
                     }
 
                     @Override
                     protected void doOnDrop(DragEvent dragEvent) {
-                        doOnDrop(dragEvent);
-                    }
-
-                    @Override
-                    protected void doOnClick(MouseEvent mouseEvent) {
-                        doOnClick(mouseEvent);
+                        doOnFileDrop(dragEvent);
                     }
                 };
             }
@@ -84,11 +80,5 @@ public abstract class AbstractExplorer extends TreeView<String> {
 
     private boolean isSourceDifferentToTarget(DragEvent event) {
         return !((FileTreeCell) event.getGestureSource()).getTreeView().getId().equals(getId());
-    }
-
-    public void generateChildNodes() throws Exception {
-        if (getRoot() == null) {
-            throw new Exception("Root node is null !");
-        }
     }
 }

@@ -5,9 +5,6 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.assertNull;
 
 public class AbstractExplorerTest {
 
@@ -20,42 +17,22 @@ public class AbstractExplorerTest {
     public void setUp() throws Exception {
         abstractExplorer = new AbstractExplorer() {
             @Override
-            public void doOnDrag(MouseEvent mouseEvent) {
+            public void doOnFileDrag(MouseEvent mouseEvent) {
 
             }
 
             @Override
-            public void doOnDrop(DragEvent dragEvent) {
+            public void doOnFileDrop(DragEvent dragEvent) {
 
             }
 
             @Override
-            public void doOnClick(MouseEvent mouseEvent) {
+            public void initializeNodes() {
 
             }
         };
 
         rootNode = new TreeItem<String>(HOSTNAME);
-    }
-
-    @Test
-    public void testGenerateChildNodes() throws Exception {
-        abstractExplorer.setRoot(rootNode);
-
-        Exception exception = null;
-        try {
-            abstractExplorer.generateChildNodes();
-        } catch(Exception e){
-            exception = e;
-        }
-
-        assertNull(exception);
-    }
-
-    @Test(expected=Exception.class)
-    public void testGenerateChildNodesWithNullRoot() throws Exception {
-        abstractExplorer.setRoot(null);
-        abstractExplorer.generateChildNodes();
     }
 
     @After

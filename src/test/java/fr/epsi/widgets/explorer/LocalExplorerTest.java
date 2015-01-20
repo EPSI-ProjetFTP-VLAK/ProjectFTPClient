@@ -56,8 +56,8 @@ public class LocalExplorerTest {
     }
 
     @Test
-    public void testGenerateChildNodes() throws Exception {
-        localExplorer.generateChildNodes();
+    public void testInitializeNodes() throws Exception {
+        localExplorer.initializeNodes();
 
         assertEquals(HOSTNAME, rootNode.getValue());
         assertEquals(testRoots[0].getName(), rootNode.getChildren().get(0).getValue());
