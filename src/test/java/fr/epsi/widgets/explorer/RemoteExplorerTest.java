@@ -1,14 +1,23 @@
 package fr.epsi.widgets.explorer;
 
+import javafx.scene.control.TreeItem;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
-public class RemoteExplorerTest {
+import static org.junit.Assert.assertFalse;
+
+public class RemoteExplorerTest extends AbstractExplorerTest {
+
+    public RemoteExplorerTest() {
+        super(Mockito.spy(new RemoteExplorer()));
+    }
 
     @Before
     public void setUp() throws Exception {
-
+        rootNode = new TreeItem<String>("Server");
+        explorer.setRoot(rootNode);
     }
 
     @After
@@ -17,7 +26,10 @@ public class RemoteExplorerTest {
     }
 
     @Test
-    public void testGenerateChildNodes() throws Exception {
+    public void testInitializeNodesWithoutConnection() throws Exception {
+        explorer.initializeNodes();
 
+        assertFalse(explorer.getRoot().isExpanded());
+        assertFalse(explorer.getRoot().getChildren().isEmpty());
     }
 }

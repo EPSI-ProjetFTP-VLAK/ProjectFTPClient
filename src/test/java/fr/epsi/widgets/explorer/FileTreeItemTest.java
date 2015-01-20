@@ -7,15 +7,25 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class FileTreeItemTest {
 
+    private Class<? extends FileTreeItem> fileTreeItemClass;
     protected FileTreeItem fileTreeItem;
-    private File file;
+    protected File file;
+
+    public FileTreeItemTest() {
+        fileTreeItemClass = FileTreeItem.class;
+    }
+
+    public FileTreeItemTest(Class<? extends FileTreeItem> fileTreeItemClass) {
+        file = Mockito.spy(new File("test-file"));
+
+        this.fileTreeItemClass = fileTreeItemClass;
+    }
 
     @Before
     public void setUp() throws Exception {
@@ -32,12 +42,7 @@ public class FileTreeItemTest {
         file = Mockito.spy(new File("test-file"));
         Mockito.doReturn(false).when(file).isDirectory();
 
-        fileTreeItem = new FileTreeItem(file) {
-            @Override
-            public void generateChildNodes() {
-
-            }
-        };
+        createFileTreeItem();
 
         assertEquals("test-file", fileTreeItem.getValue());
         assertTrue(fileTreeItem.getChildren().isEmpty());
@@ -51,15 +56,24 @@ public class FileTreeItemTest {
         Mockito.doReturn(files).when(file).listFiles();
         Mockito.doReturn(true).when(file).isDirectory();
 
-        fileTreeItem = new FileTreeItem(file) {
-            @Override
-            public void generateChildNodes() {
-
-            }
-        };
+        createFileTreeItem();
 
         assertEquals("test-folder", fileTreeItem.getValue());
         assertFalse(fileTreeItem.isExpanded());
         assertFalse(fileTreeItem.getChildren().isEmpty());
+    }
+
+    private void createFileTreeItem()
+            throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        if (fileTreeItem == null) {
+            fileTreeItem = new FileTreeItem(file) {
+                @Override
+                public void generateChildNodes() {
+
+                }
+            };
+        } else {
+            fileTreeItem = Mockito.spy(fileTreeItemClass.getDeclaredConstructor(File.class).newInstance(file));
+        }
     }
 }

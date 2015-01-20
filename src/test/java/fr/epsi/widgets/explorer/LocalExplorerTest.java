@@ -17,18 +17,18 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(FileSystemView.class)
-public class LocalExplorerTest {
+public class LocalExplorerTest extends AbstractExplorerTest {
 
     public static final String HOSTNAME = "test-computer";
 
     private File[] testRoots;
-    private LocalExplorer localExplorer;
-    private TreeItem<String> rootNode;
+
+    public LocalExplorerTest() {
+        super(Mockito.spy(new LocalExplorer()));
+    }
 
     @Before
     public void setUp() throws Exception {
-        localExplorer = new LocalExplorer();
-
         testRoots = new File[2];
 
         File firstDirectoryMock = Mockito.spy(new File("test-directory-1"));
@@ -47,7 +47,7 @@ public class LocalExplorerTest {
         PowerMockito.when(FileSystemView.getFileSystemView()).thenReturn(mockedFileSystemView);
 
         rootNode = new TreeItem<String>(HOSTNAME);
-        localExplorer.setRoot(rootNode);
+        explorer.setRoot(rootNode);
     }
 
     @After
@@ -57,7 +57,7 @@ public class LocalExplorerTest {
 
     @Test
     public void testInitializeNodes() throws Exception {
-        localExplorer.initializeNodes();
+        explorer.initializeNodes();
 
         assertEquals(HOSTNAME, rootNode.getValue());
         assertEquals(testRoots[0].getName(), rootNode.getChildren().get(0).getValue());

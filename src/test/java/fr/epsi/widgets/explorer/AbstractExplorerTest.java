@@ -6,16 +6,13 @@ import javafx.scene.input.MouseEvent;
 import org.junit.After;
 import org.junit.Before;
 
-public class AbstractExplorerTest {
+public class AbstractExplorerTest {;
 
-    public static final String HOSTNAME = "test-computer";
+    protected AbstractExplorer explorer;
+    protected TreeItem<String> rootNode;
 
-    private AbstractExplorer abstractExplorer;
-    private TreeItem<String> rootNode;
-
-    @Before
-    public void setUp() throws Exception {
-        abstractExplorer = new AbstractExplorer() {
+    public AbstractExplorerTest() {
+        explorer = new AbstractExplorer() {
             @Override
             public void doOnFileDrag(MouseEvent mouseEvent) {
 
@@ -31,8 +28,15 @@ public class AbstractExplorerTest {
 
             }
         };
+    }
 
-        rootNode = new TreeItem<String>(HOSTNAME);
+    public AbstractExplorerTest(AbstractExplorer explorer) {
+        this.explorer = explorer;
+    }
+
+    @Before
+    public void setUp() throws Exception {
+
     }
 
     @After

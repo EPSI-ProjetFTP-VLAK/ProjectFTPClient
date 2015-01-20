@@ -31,4 +31,8 @@ public class MainController implements Initializable {
     public static CommandService getCommandService() {
         return commandService;
     }
+
+    public Socket getSocket() {
+        return socket;
+    }
 }

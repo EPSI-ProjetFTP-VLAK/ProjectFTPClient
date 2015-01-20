@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -19,6 +20,11 @@ public class LocalFileTreeItemTest extends FileTreeItemTest {
 
     private File[] testRoots;
     private TreeItem<String> rootNode;
+
+    public LocalFileTreeItemTest()
+            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        super(LocalFileTreeItem.class);
+    }
 
     @Before
     public void setUp() throws Exception {
@@ -44,7 +50,7 @@ public class LocalFileTreeItemTest extends FileTreeItemTest {
     }
 
     @Test
-    public void testPrepareChildNodes() throws Exception {
+    public void testGenerateChildNodes() throws Exception {
         ((FileTreeItem) rootNode.getChildren().get(0)).generateChildNodes();
         assertEquals(testRoots[0].listFiles()[0].getName(), rootNode.getChildren().get(0).getChildren().get(0).getValue());
         assertTrue(rootNode.getChildren().get(0).getChildren().get(0).isLeaf());

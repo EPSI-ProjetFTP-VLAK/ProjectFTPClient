@@ -18,6 +18,7 @@ public class RemoteExplorerController implements Initializable {
         rootNode.setExpanded(true);
 
         remoteExplorer.setRoot(rootNode);
+        remoteExplorer.initializeNodes();
     }
 
     public TreeItem<String> generateRootNode() {
