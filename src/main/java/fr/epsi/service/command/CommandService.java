@@ -1,6 +1,7 @@
 package fr.epsi.service.command;
 
 import fr.epsi.service.FTPService;
+import fr.epsi.service.command.commands.FTPCommand;
 import fr.epsi.service.connection.ConnectionState;
 import javafx.concurrent.Task;
 import javafx.scene.control.TextArea;

@@ -1,6 +1,7 @@
 package fr.epsi.service.command;
 
 import fr.epsi.service.FTPServiceTest;
+import fr.epsi.service.command.commands.FTPCommand;
 import javafx.application.Platform;
 import org.junit.Before;
 import org.junit.Test;

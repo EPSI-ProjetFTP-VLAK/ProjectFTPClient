@@ -1,8 +1,8 @@
-package fr.epsi.service.command;
+package fr.epsi.service.command.commands;
 
 import java.net.Socket;
 
-public class FTPCommand {
+public abstract class FTPCommand {
 
     private boolean executed;
 
