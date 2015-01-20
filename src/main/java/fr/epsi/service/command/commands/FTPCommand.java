@@ -5,6 +5,8 @@ import java.net.Socket;
 
 public abstract class FTPCommand {
 
+    public static String SEPARATOR = "::--::";
+
     private boolean executed;
     protected Object[] response;
 

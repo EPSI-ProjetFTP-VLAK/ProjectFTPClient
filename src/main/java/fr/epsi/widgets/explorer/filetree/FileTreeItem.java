@@ -7,6 +7,7 @@ import javafx.scene.control.TreeItem;
 import java.io.File;
 
 public abstract class FileTreeItem extends TreeItem<String> {
+
     protected File file;
 
     public FileTreeItem(File file) {

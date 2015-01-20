@@ -1,6 +1,7 @@
 package fr.epsi.widgets.explorer;
 
 import fr.epsi.widgets.explorer.filetree.FileTreeItem;
+import javafx.scene.control.TreeItem;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +17,8 @@ public class FileTreeItemTest {
     private Class<? extends FileTreeItem> fileTreeItemClass;
     protected FileTreeItem fileTreeItem;
     protected File file;
+    protected TreeItem<String> rootNode;
+    protected File[] testRoots;
 
     public FileTreeItemTest() {
         fileTreeItemClass = FileTreeItem.class;

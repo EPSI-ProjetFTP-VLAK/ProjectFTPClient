@@ -16,6 +16,10 @@ public class LsCommandTest extends FTPCommandTest {
         super(Mockito.spy(new LsCommand()));
     }
 
+    public LsCommandTest(FTPCommand mockedFtpCommand) {
+        super(mockedFtpCommand);
+    }
+
     @Before
     @Override
     public void setUp() throws Exception {

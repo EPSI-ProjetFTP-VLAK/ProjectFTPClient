@@ -18,9 +18,6 @@ public class LocalFileTreeItemTest extends FileTreeItemTest {
 
     public static final String HOSTNAME = "test-computer";
 
-    private File[] testRoots;
-    private TreeItem<String> rootNode;
-
     public LocalFileTreeItemTest()
             throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         super(LocalFileTreeItem.class);
