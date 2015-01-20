@@ -12,7 +12,7 @@ public class LocalFileTreeItem extends FileTreeItem {
 
     @Override
     public void generateChildNodes() {
-        if (this.getChildren().size() < 1) {
+        if (isLeaf()) {
             return;
         }
 

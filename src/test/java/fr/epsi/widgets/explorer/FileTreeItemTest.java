@@ -1,6 +1,8 @@
 package fr.epsi.widgets.explorer;
 
 import fr.epsi.widgets.explorer.filetree.FileTreeItem;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import org.junit.After;
 import org.junit.Before;
@@ -19,6 +21,7 @@ public class FileTreeItemTest {
     protected File file;
     protected TreeItem<String> rootNode;
     protected File[] testRoots;
+    protected ObservableList<TreeItem> mockedChildren = FXCollections.observableArrayList();
 
     public FileTreeItemTest() {
         fileTreeItemClass = FileTreeItem.class;
@@ -63,7 +66,7 @@ public class FileTreeItemTest {
 
         assertEquals("test-folder", fileTreeItem.getValue());
         assertFalse(fileTreeItem.isExpanded());
-        assertFalse(fileTreeItem.getChildren().isEmpty());
+        assertEquals(0, fileTreeItem.getChildren().size());
     }
 
     private void createFileTreeItem()

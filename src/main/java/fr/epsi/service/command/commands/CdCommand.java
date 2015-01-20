@@ -17,6 +17,7 @@ public class CdCommand extends LsCommand {
     @Override
     public void execute(Socket socket) {
         PrintWriter out = null;
+
         try {
             out = getSocketPrintWriter(socket);
             out.println("cd" + SEPARATOR + directory);

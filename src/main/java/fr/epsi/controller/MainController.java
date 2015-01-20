@@ -11,7 +11,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
-    private Socket socket;
+    private static Socket socket;
     private static ConnectionService connectionService;
     private static CommandService commandService;
 
@@ -32,7 +32,7 @@ public class MainController implements Initializable {
         return commandService;
     }
 
-    public Socket getSocket() {
-        return socket;
+    public static boolean isSocketConnected() {
+        return socket.isConnected();
     }
 }

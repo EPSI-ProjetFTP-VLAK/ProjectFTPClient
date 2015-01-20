@@ -9,6 +9,7 @@ import java.io.File;
 public abstract class FileTreeItem extends TreeItem<String> {
 
     protected File file;
+    private boolean isFirstChild = true;
 
     public FileTreeItem(File file) {
         super(file.toString());
@@ -20,7 +21,7 @@ public abstract class FileTreeItem extends TreeItem<String> {
 
     public abstract void generateChildNodes();
 
-    private void setParameters() {
+    protected void setParameters() {
         if(file.isDirectory()) {
             setExpanded(false);
             //TODO ajouter image setGraphic(new ImageView(folderCollapseImage));
@@ -38,10 +39,6 @@ public abstract class FileTreeItem extends TreeItem<String> {
                 setValue(value);
             }
         }
-
-        if (file.listFiles() != null) {
-            getChildren().add(new TreeItem<String>());
-        }
     }
 
     private void attachExpandedListener() {
@@ -51,5 +48,10 @@ public abstract class FileTreeItem extends TreeItem<String> {
                 generateChildNodes();
             }
         });
+    }
+
+    @Override
+    public boolean isLeaf() {
+        return !file.isDirectory();
     }
 }
