@@ -15,7 +15,7 @@ public class CdCommand extends LsCommand {
     }
 
     @Override
-    public void execute(Socket socket) {
+    public void execute(Socket socket) throws Exception {
         PrintWriter out = null;
 
         try {

@@ -6,7 +6,7 @@ import java.net.Socket;
 public class LsCommand extends FTPCommand {
 
     @Override
-    public void execute(Socket socket) {
+    public void execute(Socket socket) throws Exception {
         try {
             PrintWriter out = getSocketPrintWriter(socket);
             out.println("ls");

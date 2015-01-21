@@ -14,7 +14,7 @@ public abstract class FTPCommand {
         executed = false;
     }
 
-    public void execute(Socket socket) {
+    public void execute(Socket socket) throws Exception {
         executed = true;
     }
 

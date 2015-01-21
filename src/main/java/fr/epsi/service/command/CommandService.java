@@ -42,7 +42,12 @@ public class CommandService extends FTPService {
             private void executeNextCommand() {
                 if (commandQueue.size() > 0) {
                     FTPCommand ftpCommand = commandQueue.poll();
-                    ftpCommand.execute(socket);
+
+                    try {
+                        ftpCommand.execute(socket);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         };
