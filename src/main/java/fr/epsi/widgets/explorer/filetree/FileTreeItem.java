@@ -9,7 +9,6 @@ import java.io.File;
 public abstract class FileTreeItem extends TreeItem<String> {
 
     protected File file;
-    private boolean isFirstChild = true;
 
     public FileTreeItem(File file) {
         super(file.toString());

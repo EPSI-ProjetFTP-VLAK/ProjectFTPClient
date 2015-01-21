@@ -18,9 +18,13 @@ public class LocalFileTreeItem extends FileTreeItem {
 
         this.getChildren().clear();
 
-        for (File subFile : file.listFiles()) {
-            FileTreeItem treeNode = new LocalFileTreeItem(subFile);
-            this.getChildren().add(treeNode);
+        try {
+            for (File subFile : file.listFiles()) {
+                FileTreeItem treeNode = new LocalFileTreeItem(subFile);
+                this.getChildren().add(treeNode);
+            }
+        } catch (NullPointerException e) {
+
         }
     }
 }

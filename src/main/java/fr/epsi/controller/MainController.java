@@ -33,6 +33,6 @@ public class MainController implements Initializable {
     }
 
     public static boolean isSocketConnected() {
-        return socket.isConnected();
+        return socket != null && socket.isConnected();
     }
 }
