@@ -36,7 +36,7 @@ public class LsCommandTest extends FTPCommandTest {
         Mockito.doReturn(mockedFiles[0])
                 .doReturn(mockedFiles[1])
                 .doReturn(mockedFiles[2])
-                .doReturn(mockedFiles[3]).when((LsCommand) mockedFtpCommand).readFileFromSocket(mockedSocket);
+                .doReturn(mockedFiles[3]).when((LsCommand) mockedFtpCommand).readFileFromSocket();
     }
 
     @After
@@ -47,12 +47,12 @@ public class LsCommandTest extends FTPCommandTest {
 
     @Test
     public void testExecuteWithFourFiles() throws Exception {
-        mockedFtpCommand.execute(mockedSocket);
+        mockedFtpCommand.execute();
 
-        Mockito.verify(mockedPrintWriter).println("ls");
+        Mockito.verify(mockedPrintWriter).println("ls" + FTPCommand.SEPARATOR);
         Mockito.verify(mockedPrintWriter, Mockito.atLeast(1)).flush();
 
-        Mockito.verify((LsCommand) mockedFtpCommand, Mockito.times(4)).readFileFromSocket(mockedSocket);
+        Mockito.verify((LsCommand) mockedFtpCommand, Mockito.times(4)).readFileFromSocket();
 
         File[] ftpCommandResponse = (File[]) mockedFtpCommand.getResponse();
         for (int i = 0; i < ftpCommandResponse.length; i++) {

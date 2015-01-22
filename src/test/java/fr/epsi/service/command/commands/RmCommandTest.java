@@ -30,7 +30,7 @@ public class RmCommandTest extends FTPCommandTest {
     public void testExecute() throws Exception {
         Mockito.doReturn("rm:0").when(mockedBufferedReader).readLine();
 
-        mockedFtpCommand.execute(mockedSocket);
+        mockedFtpCommand.execute();
 
         Mockito.verify(mockedPrintWriter).println("rm" + FTPCommand.SEPARATOR + "test-file");
         Mockito.verify(mockedPrintWriter, Mockito.atLeast(1)).flush();
@@ -40,7 +40,7 @@ public class RmCommandTest extends FTPCommandTest {
     public void testExecuteFailed() throws Exception {
         Mockito.doReturn("rm:-1").when(mockedBufferedReader).readLine();
 
-        mockedFtpCommand.execute(mockedSocket);
+        mockedFtpCommand.execute();
 
         Mockito.verify(mockedPrintWriter).println("rm" + FTPCommand.SEPARATOR + "test-file");
         Mockito.verify(mockedPrintWriter, Mockito.atLeast(1)).flush();

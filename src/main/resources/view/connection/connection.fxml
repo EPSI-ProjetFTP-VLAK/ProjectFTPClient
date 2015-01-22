@@ -12,7 +12,7 @@
         <TextField fx:id="username" promptText="Utilisateur..." GridPane.columnIndex="1" />
         <PasswordField fx:id="password" promptText="Mot de passe..." GridPane.columnIndex="2" />
         <TextField fx:id="port" prefWidth="80.0" promptText="Port..." GridPane.columnIndex="3" />
-        <Button fx:id="connectionButton" mnemonicParsing="false" text="Connection" GridPane.columnIndex="4" onAction="#connect" />
+        <Button fx:id="connectionButton" mnemonicParsing="false" text="Connexion" GridPane.columnIndex="4" onAction="#connect" />
    </children>
 
    <padding>

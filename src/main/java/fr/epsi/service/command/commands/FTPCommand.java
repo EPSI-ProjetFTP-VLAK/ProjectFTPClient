@@ -1,7 +1,8 @@
 package fr.epsi.service.command.commands;
 
+import fr.epsi.controller.MainController;
+
 import java.io.*;
-import java.net.Socket;
 
 public abstract class FTPCommand {
 
@@ -14,7 +15,7 @@ public abstract class FTPCommand {
         executed = false;
     }
 
-    public void execute(Socket socket) throws Exception {
+    public void execute() throws Exception {
         executed = true;
     }
 
@@ -22,20 +23,20 @@ public abstract class FTPCommand {
         return executed;
     }
 
-    public BufferedReader getSocketBufferedReader(Socket socket) throws IOException {
-        return new BufferedReader(new InputStreamReader(socket.getInputStream()));
+    public BufferedReader getSocketBufferedReader() throws IOException {
+        return new BufferedReader(new InputStreamReader(MainController.getConnectionService().getSocket().getInputStream()));
     }
 
-    public PrintWriter getSocketPrintWriter(Socket socket) throws IOException {
-        return new PrintWriter(socket.getOutputStream());
+    public PrintWriter getSocketPrintWriter() throws IOException {
+        return new PrintWriter(MainController.getConnectionService().getSocket().getOutputStream());
     }
 
-    public ObjectOutputStream getSocketObjectOutputStream(Socket socket) throws IOException {
-        return new ObjectOutputStream(socket.getOutputStream());
+    public ObjectOutputStream getSocketObjectOutputStream() throws IOException {
+        return new ObjectOutputStream(MainController.getConnectionService().getSocket().getOutputStream());
     }
 
-    public ObjectInputStream getSocketObjectInputStream(Socket socket) throws IOException {
-        return new ObjectInputStream(socket.getInputStream());
+    public ObjectInputStream getSocketObjectInputStream() throws IOException {
+        return new ObjectInputStream(MainController.getConnectionService().getSocket().getInputStream());
     }
 
     public Object getResponse() {

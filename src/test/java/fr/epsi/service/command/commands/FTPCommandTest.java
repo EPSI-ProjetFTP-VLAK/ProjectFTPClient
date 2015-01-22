@@ -40,10 +40,10 @@ public class FTPCommandTest {
 
         Mockito.doReturn(true).when(mockedSocket).isConnected();
 
-        Mockito.doReturn(mockedBufferedReader).when(mockedFtpCommand).getSocketBufferedReader(mockedSocket);
-        Mockito.doReturn(mockedPrintWriter).when(mockedFtpCommand).getSocketPrintWriter(mockedSocket);
-        Mockito.doReturn(mockedObjectOutputStream).when(mockedFtpCommand).getSocketObjectOutputStream(mockedSocket);
-        Mockito.doReturn(mockedObjectInputStream).when(mockedFtpCommand).getSocketObjectInputStream(mockedSocket);
+        Mockito.doReturn(mockedBufferedReader).when(mockedFtpCommand).getSocketBufferedReader();
+        Mockito.doReturn(mockedPrintWriter).when(mockedFtpCommand).getSocketPrintWriter();
+        Mockito.doReturn(mockedObjectOutputStream).when(mockedFtpCommand).getSocketObjectOutputStream();
+        Mockito.doReturn(mockedObjectInputStream).when(mockedFtpCommand).getSocketObjectInputStream();
 
         assertFalse(mockedFtpCommand.isExecuted());
     }
@@ -57,6 +57,6 @@ public class FTPCommandTest {
 
     @Test
     public void testExecute() throws Exception {
-        mockedFtpCommand.execute(mockedSocket);
+        mockedFtpCommand.execute();
     }
 }

@@ -15,7 +15,7 @@ public class RemoteFileTreeItem extends FileTreeItem {
 
     @Override
     public void generateChildNodes() {
-        if (MainController.isSocketConnected()) {
+        if (isSocketConnect()) {
             CdCommand cdCommand = createCdCommand();
 
             CommandService commandService = MainController.getCommandService();
@@ -29,6 +29,10 @@ public class RemoteFileTreeItem extends FileTreeItem {
                 getChildren().add(new RemoteFileTreeItem(subFile));
             }
         }
+    }
+
+    public boolean isSocketConnect() {
+        return MainController.getConnectionService().getSocket() != null && MainController.getConnectionService().getSocket().isConnected();
     }
 
     public CdCommand createCdCommand() {

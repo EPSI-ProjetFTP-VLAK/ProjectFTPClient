@@ -1,35 +1,34 @@
 package fr.epsi.service.command.commands;
 
 import java.io.*;
-import java.net.Socket;
 
 public class LsCommand extends FTPCommand {
 
     @Override
-    public void execute(Socket socket) throws Exception {
+    public void execute() throws Exception {
         try {
-            PrintWriter out = getSocketPrintWriter(socket);
-            out.println("ls");
+            PrintWriter out = getSocketPrintWriter();
+            out.println("ls" + SEPARATOR);
             out.flush();
 
-            BufferedReader stringIn = getSocketBufferedReader(socket);
+            BufferedReader stringIn = getSocketBufferedReader();
             String[] socketResponse = stringIn.readLine().split(":");
 
             int numberOfFiles = Integer.valueOf(socketResponse[1]);
             response = new File[numberOfFiles];
             for (int fileIndex = 0; fileIndex < numberOfFiles; fileIndex++) {
-                response[fileIndex] = readFileFromSocket(socket);
+                response[fileIndex] = readFileFromSocket();
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
-        super.execute(socket);
+        super.execute();
     }
 
-    public File readFileFromSocket(Socket socket)
+    public File readFileFromSocket()
             throws IOException, ClassNotFoundException {
-        ObjectInputStream objectIn = getSocketObjectInputStream(socket);
+        ObjectInputStream objectIn = getSocketObjectInputStream();
 
         return (File) objectIn.readObject();
     }

@@ -38,6 +38,7 @@ public class RemoteRootFileTreeItemTest {
     public void setUp() throws Exception {
         mockedRootTreeItem = Mockito.spy(new RemoteRootFileTreeItem("test-value"));
         Mockito.doReturn(mockedChildren).when(mockedRootTreeItem).getChildren();
+        Mockito.doReturn(true).when(mockedRootTreeItem).isSocketConnect();
 
         mockedLsResponse = Mockito.spy(new File("test-folder"));
         Mockito.doReturn(true).when(mockedLsResponse).isDirectory();
@@ -45,15 +46,13 @@ public class RemoteRootFileTreeItemTest {
         mockedLsCommand = Mockito.spy(new LsCommand());
         Mockito.doReturn(mockedLsCommand).when(mockedRootTreeItem).createLsCommand();
         Mockito.doReturn(mockedLsResponse).when(mockedLsCommand).getResponse();
-
-        Mockito.doReturn(false).doReturn(true).when(mockedCommandQueue).contains(mockedLsCommand);
+        Mockito.doReturn(false).doReturn(true).when(mockedLsCommand).isExecuted();
 
         mockedCommandService = Mockito.mock(CommandService.class);
         Mockito.doReturn(mockedCommandQueue).when(mockedCommandService).getCommandQueue();
 
         PowerMockito.mockStatic(MainController.class);
         PowerMockito.when(MainController.getCommandService()).thenReturn(mockedCommandService);
-        PowerMockito.when(MainController.isSocketConnected()).thenReturn(true);
     }
 
     @After
@@ -65,8 +64,9 @@ public class RemoteRootFileTreeItemTest {
     public void testChildrenGeneration() throws Exception {
         mockedRootTreeItem.generateChildren();
 
-        Mockito.verify(mockedCommandQueue, Mockito.atLeast(1)).contains(mockedLsCommand);
         Mockito.verify(mockedCommandQueue).offer(mockedLsCommand);
+
+        Mockito.verify(mockedLsCommand, Mockito.atLeast(1)).isExecuted();
 
         assertEquals(1, mockedRootTreeItem.getChildren().size());
         assertEquals("test-folder", mockedRootTreeItem.getChildren().get(0).getValue());

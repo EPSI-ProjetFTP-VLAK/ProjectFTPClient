@@ -1,7 +1,9 @@
 package fr.epsi.service.command.commands;
 
-import java.io.*;
-import java.net.Socket;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class RmCommand extends FTPCommand {
 
@@ -14,16 +16,16 @@ public class RmCommand extends FTPCommand {
     }
 
     @Override
-    public void execute(Socket socket) throws Exception {
+    public void execute() throws Exception {
         try {
-            PrintWriter out = getSocketPrintWriter(socket);
+            PrintWriter out = getSocketPrintWriter();
             out.println("rm" + SEPARATOR + file.toString());
             out.flush();
 
-            BufferedReader stringIn = getSocketBufferedReader(socket);
+            BufferedReader stringIn = getSocketBufferedReader();
             String[] socketResponse = stringIn.readLine().split(":");
 
-            super.execute(socket);
+            super.execute();
 
             if (Integer.valueOf(socketResponse[1]) != 0) {
                 throw new Exception("Wrong response code");

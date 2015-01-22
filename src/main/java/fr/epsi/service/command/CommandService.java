@@ -11,11 +11,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class CommandService extends FTPService {
 
-    private Queue<FTPCommand> commandQueue;
+    private Queue<FTPCommand> commandQueue = new PriorityQueue<>();
 
     public CommandService() {
     }
@@ -44,7 +45,7 @@ public class CommandService extends FTPService {
                     FTPCommand ftpCommand = commandQueue.poll();
 
                     try {
-                        ftpCommand.execute(socket);
+                        ftpCommand.execute();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

@@ -47,6 +47,7 @@ public class RemoteFileTreeItemTest extends FileTreeItemTest {
 
         fileTreeItem = Mockito.spy(new RemoteFileTreeItem(testRoots[0]));
         Mockito.doReturn(mockedChildren).when(fileTreeItem).getChildren();
+        Mockito.doReturn(true).when((RemoteFileTreeItem) fileTreeItem).isSocketConnect();
 
         rootNode = new TreeItem<String>(HOSTNAME);
         rootNode.getChildren().add(fileTreeItem);
@@ -61,7 +62,6 @@ public class RemoteFileTreeItemTest extends FileTreeItemTest {
 
         PowerMockito.mockStatic(MainController.class);
         PowerMockito.when(MainController.getCommandService()).thenReturn(mockedCommandService);
-        PowerMockito.when(MainController.isSocketConnected()).thenReturn(true);
     }
 
     @After
@@ -88,7 +88,7 @@ public class RemoteFileTreeItemTest extends FileTreeItemTest {
 
     @Test
     public void testGenerateChildNodesWithoutConnection() throws Exception {
-        PowerMockito.when(MainController.isSocketConnected()).thenReturn(false);
+        Mockito.doReturn(false).when((RemoteFileTreeItem) fileTreeItem).isSocketConnect();
 
         fileTreeItem.generateChildNodes();
 

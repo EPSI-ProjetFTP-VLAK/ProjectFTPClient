@@ -48,7 +48,7 @@ public class CommandServiceTest extends FTPServiceTest {
         while (commandQueue.size() > 0) {}
 
         Mockito.verify(commandQueue, Mockito.times(1)).poll();
-        Mockito.verify(mockedFtpCommand, Mockito.times(1)).execute(mockedSocket);
+        Mockito.verify(mockedFtpCommand, Mockito.times(1)).execute();
     }
 
     @Test
@@ -68,7 +68,7 @@ public class CommandServiceTest extends FTPServiceTest {
         Mockito.verify(commandQueue, Mockito.times(5)).poll();
 
         for (FTPCommand ftpCommand : ftpCommands) {
-            Mockito.verify(ftpCommand, Mockito.times(1)).execute(mockedSocket);
+            Mockito.verify(ftpCommand, Mockito.times(1)).execute();
         }
     }
 }

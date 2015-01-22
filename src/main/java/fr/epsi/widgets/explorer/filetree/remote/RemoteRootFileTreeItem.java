@@ -27,17 +27,23 @@ public class RemoteRootFileTreeItem extends TreeItem<String> {
     }
 
     public void generateChildren() {
-        if (MainController.isSocketConnected()) {
+        if (isSocketConnect()) {
             LsCommand lsCommand = createLsCommand();
 
             CommandService commandService = MainController.getCommandService();
             commandService.getCommandQueue().offer(lsCommand);
 
-            while (commandService.getCommandQueue().contains(lsCommand)) {}
+            while (!lsCommand.isExecuted()) {}
 
             File file = (File) lsCommand.getResponse();
-            getChildren().add(new RemoteFileTreeItem(file));
+            if (file != null) {
+                getChildren().add(new RemoteFileTreeItem(file));
+            }
         }
+    }
+
+    public boolean isSocketConnect() {
+        return MainController.getConnectionService().getSocket() != null && MainController.getConnectionService().getSocket().isConnected();
     }
 
     public LsCommand createLsCommand() {
