@@ -32,7 +32,7 @@ public class RemoteRootFileTreeItemTest {
     private LsCommand mockedLsCommand;
     private CommandService mockedCommandService;
     private Queue<FTPCommand> mockedCommandQueue = Mockito.spy(new PriorityQueue<FTPCommand>());
-    private File mockedLsResponse;
+    private File[] mockedLsResponse;
 
     @Before
     public void setUp() throws Exception {
@@ -40,8 +40,9 @@ public class RemoteRootFileTreeItemTest {
         Mockito.doReturn(mockedChildren).when(mockedRootTreeItem).getChildren();
         Mockito.doReturn(true).when(mockedRootTreeItem).isSocketConnect();
 
-        mockedLsResponse = Mockito.spy(new File("test-folder"));
-        Mockito.doReturn(true).when(mockedLsResponse).isDirectory();
+        File mockedFile = Mockito.spy(new File("test-folder"));
+        Mockito.doReturn(true).when(mockedFile).isDirectory();
+        mockedLsResponse = new File[] { mockedFile };
 
         mockedLsCommand = Mockito.spy(new LsCommand());
         Mockito.doReturn(mockedLsCommand).when(mockedRootTreeItem).createLsCommand();

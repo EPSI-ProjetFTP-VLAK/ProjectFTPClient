@@ -20,8 +20,10 @@ public class RemoteRootFileTreeItem extends TreeItem<String> {
     private void attachExpantionListener() {
         expandedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
-            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                generateChildren();
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean wasExpanded, Boolean isExpanded) {
+                if (isExpanded) {
+                    generateChildren();
+                }
             }
         });
     }
@@ -33,9 +35,16 @@ public class RemoteRootFileTreeItem extends TreeItem<String> {
             CommandService commandService = MainController.getCommandService();
             commandService.getCommandQueue().offer(lsCommand);
 
-            while (!lsCommand.isExecuted()) {}
+            while (!lsCommand.isExecuted()) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
 
             File[] files = (File[]) lsCommand.getResponse();
+            getChildren().clear();
             for (File file : files) {
                 getChildren().add(new RemoteFileTreeItem(file));
             }

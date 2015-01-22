@@ -50,6 +50,12 @@ public class CommandService extends FTPService {
                         e.printStackTrace();
                     }
                 }
+
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+
+                }
             }
         };
     }

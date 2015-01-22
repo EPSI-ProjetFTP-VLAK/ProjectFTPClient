@@ -26,8 +26,7 @@ public class LsCommand extends FTPCommand {
         super.execute();
     }
 
-    public File readFileFromSocket()
-            throws IOException, ClassNotFoundException {
+    public File readFileFromSocket() throws IOException, ClassNotFoundException {
         ObjectInputStream objectIn = getSocketObjectInputStream();
 
         return (File) objectIn.readObject();
