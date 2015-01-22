@@ -35,8 +35,8 @@ public class RemoteRootFileTreeItem extends TreeItem<String> {
 
             while (!lsCommand.isExecuted()) {}
 
-            File file = (File) lsCommand.getResponse();
-            if (file != null) {
+            File[] files = (File[]) lsCommand.getResponse();
+            for (File file : files) {
                 getChildren().add(new RemoteFileTreeItem(file));
             }
         }
