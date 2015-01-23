@@ -1,6 +1,7 @@
 package fr.epsi.widgets.explorer.filetree.remote;
 
 import fr.epsi.controller.MainController;
+import fr.epsi.dto.FileDTO;
 import fr.epsi.service.command.CommandService;
 import fr.epsi.service.command.commands.CdCommand;
 import fr.epsi.service.command.commands.FTPCommand;
@@ -45,7 +46,7 @@ public class RemoteFileTreeItemTest extends FileTreeItemTest {
         Mockito.doReturn(true).when(firstDirectoryMock).isDirectory();
         testRoots[0] = firstDirectoryMock;
 
-        fileTreeItem = Mockito.spy(new RemoteFileTreeItem(testRoots[0]));
+        fileTreeItem = Mockito.spy(new RemoteFileTreeItem(new FileDTO(testRoots[0])));
         Mockito.doReturn(mockedChildren).when(fileTreeItem).getChildren();
         Mockito.doReturn(true).when((RemoteFileTreeItem) fileTreeItem).isSocketConnect();
 
@@ -73,9 +74,12 @@ public class RemoteFileTreeItemTest extends FileTreeItemTest {
     public void testGenerateChildNodesWithConnection() throws Exception {
 
         File responseDirectory = Mockito.spy(new File("test-directory-1"));
+        Mockito.doReturn(true).when(responseDirectory).isDirectory();
         Mockito.doReturn(new File[] { new File("test-file-1"), new File("test-file-2") }).when(responseDirectory).listFiles();
 
-        Mockito.doReturn(responseDirectory).when(mockedFtpCommand).getResponse();
+        FileDTO responseDirectoryDTO = new FileDTO(responseDirectory, true);
+
+        Mockito.doReturn(responseDirectoryDTO).when(mockedFtpCommand).getResponse();
 
         fileTreeItem.generateChildNodes();
 

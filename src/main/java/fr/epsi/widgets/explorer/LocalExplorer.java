@@ -1,5 +1,6 @@
 package fr.epsi.widgets.explorer;
 
+import fr.epsi.dto.FileDTO;
 import fr.epsi.widgets.explorer.filetree.FileTreeItem;
 import fr.epsi.widgets.explorer.filetree.local.LocalFileTreeItem;
 import javafx.scene.input.DragEvent;
@@ -28,7 +29,7 @@ public class LocalExplorer extends AbstractExplorer {
     public void initializeNodes() {
         File[] rootDirectories = FileSystemView.getFileSystemView().getRoots();
         for (File rootDirectory : rootDirectories) {
-            FileTreeItem treeNode = new LocalFileTreeItem(rootDirectory);
+            FileTreeItem treeNode = new LocalFileTreeItem(new FileDTO(rootDirectory));
             getRoot().getChildren().add(treeNode);
         }
     }

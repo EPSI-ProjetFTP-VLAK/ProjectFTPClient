@@ -1,5 +1,6 @@
 package fr.epsi.widgets.explorer;
 
+import fr.epsi.dto.FileDTO;
 import fr.epsi.widgets.explorer.filetree.FileTreeItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,7 +19,7 @@ public class FileTreeItemTest {
 
     private Class<? extends FileTreeItem> fileTreeItemClass;
     protected FileTreeItem fileTreeItem;
-    protected File file;
+    protected FileDTO file;
     protected TreeItem<String> rootNode;
     protected File[] testRoots;
     protected ObservableList<TreeItem> mockedChildren = FXCollections.observableArrayList();
@@ -28,7 +29,7 @@ public class FileTreeItemTest {
     }
 
     public FileTreeItemTest(Class<? extends FileTreeItem> fileTreeItemClass) {
-        file = Mockito.spy(new File("test-file"));
+        file = Mockito.spy(new FileDTO(new File("test-file")));
 
         this.fileTreeItemClass = fileTreeItemClass;
     }
@@ -45,8 +46,8 @@ public class FileTreeItemTest {
 
     @Test
     public void testFile() throws Exception {
-        file = Mockito.spy(new File("test-file"));
-        Mockito.doReturn(false).when(file).isDirectory();
+        file = Mockito.spy(new FileDTO(new File("test-file")));
+        file.setDirectory(false);
 
         createFileTreeItem();
 
@@ -56,11 +57,13 @@ public class FileTreeItemTest {
 
     @Test
     public void testFolder() throws Exception {
-        file = Mockito.spy(new File("test-folder"));
-        File[] files = new File[] { new File("test-file-1"), new File("test-file-2") };
+        File mockedFile = Mockito.spy(new File("test-folder"));
+        Mockito.doReturn(true).when(mockedFile).isDirectory();
 
-        Mockito.doReturn(files).when(file).listFiles();
-        Mockito.doReturn(true).when(file).isDirectory();
+        File[] files = new File[] { new File("test-file-1"), new File("test-file-2") };
+        Mockito.doReturn(files).when(mockedFile).listFiles();
+
+        file = Mockito.spy(new FileDTO(mockedFile));
 
         createFileTreeItem();
 
@@ -79,7 +82,7 @@ public class FileTreeItemTest {
                 }
             };
         } else {
-            fileTreeItem = Mockito.spy(fileTreeItemClass.getDeclaredConstructor(File.class).newInstance(file));
+            fileTreeItem = Mockito.spy(fileTreeItemClass.getDeclaredConstructor(FileDTO.class).newInstance(file));
         }
     }
 }

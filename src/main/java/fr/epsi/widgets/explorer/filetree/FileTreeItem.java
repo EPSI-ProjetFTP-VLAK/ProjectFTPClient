@@ -1,5 +1,6 @@
 package fr.epsi.widgets.explorer.filetree;
 
+import fr.epsi.dto.FileDTO;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TreeItem;
@@ -8,10 +9,10 @@ import java.io.File;
 
 public abstract class FileTreeItem extends TreeItem<String> {
 
-    protected File file;
+    protected FileDTO file;
 
-    public FileTreeItem(File file) {
-        super(file.toString());
+    public FileTreeItem(FileDTO file) {
+        super(file.getName());
         this.file = file;
 
         setParameters();
@@ -28,8 +29,8 @@ public abstract class FileTreeItem extends TreeItem<String> {
             //TODO ajouter image setGraphic(new ImageView(fileImage));
         }
 
-        if(!file.toPath().toString().endsWith(File.separator)) {
-            String value = file.toString();
+        if(!file.getFile().toPath().toString().endsWith(File.separator)) {
+            String value = file.getName();
             int indexOf = value.lastIndexOf(File.separator);
 
             if (indexOf > 0) {

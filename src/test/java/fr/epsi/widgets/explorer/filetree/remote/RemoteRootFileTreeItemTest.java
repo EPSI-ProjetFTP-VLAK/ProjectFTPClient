@@ -1,6 +1,7 @@
 package fr.epsi.widgets.explorer.filetree.remote;
 
 import fr.epsi.controller.MainController;
+import fr.epsi.dto.FileDTO;
 import fr.epsi.service.command.CommandService;
 import fr.epsi.service.command.commands.FTPCommand;
 import fr.epsi.service.command.commands.LsCommand;
@@ -32,7 +33,7 @@ public class RemoteRootFileTreeItemTest {
     private LsCommand mockedLsCommand;
     private CommandService mockedCommandService;
     private Queue<FTPCommand> mockedCommandQueue = Mockito.spy(new PriorityQueue<FTPCommand>());
-    private File[] mockedLsResponse;
+    private FileDTO[] mockedLsResponse;
 
     @Before
     public void setUp() throws Exception {
@@ -42,7 +43,7 @@ public class RemoteRootFileTreeItemTest {
 
         File mockedFile = Mockito.spy(new File("test-folder"));
         Mockito.doReturn(true).when(mockedFile).isDirectory();
-        mockedLsResponse = new File[] { mockedFile };
+        mockedLsResponse = new FileDTO[] { new FileDTO(mockedFile, true) };
 
         mockedLsCommand = Mockito.spy(new LsCommand());
         Mockito.doReturn(mockedLsCommand).when(mockedRootTreeItem).createLsCommand();

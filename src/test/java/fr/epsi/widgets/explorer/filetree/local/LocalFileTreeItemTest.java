@@ -1,5 +1,6 @@
 package fr.epsi.widgets.explorer.filetree.local;
 
+import fr.epsi.dto.FileDTO;
 import fr.epsi.widgets.explorer.FileTreeItemTest;
 import javafx.scene.control.TreeItem;
 import org.junit.After;
@@ -31,7 +32,7 @@ public class LocalFileTreeItemTest extends FileTreeItemTest {
         Mockito.doReturn(new File[] { new File("test-file-1"), new File("test-file-2") }).when(firstDirectoryMock).listFiles();
         testRoots[0] = firstDirectoryMock;
 
-        fileTreeItem = Mockito.spy(new LocalFileTreeItem(testRoots[0]));
+        fileTreeItem = Mockito.spy(new LocalFileTreeItem(new FileDTO(testRoots[0])));
         Mockito.doReturn(mockedChildren).when(fileTreeItem).getChildren();
 
         rootNode = new TreeItem<String>(HOSTNAME);

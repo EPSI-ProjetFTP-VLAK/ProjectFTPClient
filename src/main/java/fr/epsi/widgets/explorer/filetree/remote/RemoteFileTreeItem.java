@@ -1,15 +1,14 @@
 package fr.epsi.widgets.explorer.filetree.remote;
 
 import fr.epsi.controller.MainController;
+import fr.epsi.dto.FileDTO;
 import fr.epsi.service.command.CommandService;
 import fr.epsi.service.command.commands.CdCommand;
 import fr.epsi.widgets.explorer.filetree.FileTreeItem;
 
-import java.io.File;
-
 public class RemoteFileTreeItem extends FileTreeItem {
 
-    public RemoteFileTreeItem(File file) {
+    public RemoteFileTreeItem(FileDTO file) {
         super(file);
     }
 
@@ -23,9 +22,9 @@ public class RemoteFileTreeItem extends FileTreeItem {
 
             while (commandService.getCommandQueue().contains(cdCommand)) {}
 
-            file = (File) cdCommand.getResponse();
+            file = (FileDTO) cdCommand.getResponse();
 
-            for (File subFile : file.listFiles()) {
+            for (FileDTO subFile : file.getChildren()) {
                 getChildren().add(new RemoteFileTreeItem(subFile));
             }
         }

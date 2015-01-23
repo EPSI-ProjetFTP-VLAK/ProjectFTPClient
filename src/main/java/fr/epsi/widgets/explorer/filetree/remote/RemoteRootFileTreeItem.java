@@ -1,13 +1,12 @@
 package fr.epsi.widgets.explorer.filetree.remote;
 
 import fr.epsi.controller.MainController;
+import fr.epsi.dto.FileDTO;
 import fr.epsi.service.command.CommandService;
 import fr.epsi.service.command.commands.LsCommand;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TreeItem;
-
-import java.io.File;
 
 public class RemoteRootFileTreeItem extends TreeItem<String> {
 
@@ -43,9 +42,9 @@ public class RemoteRootFileTreeItem extends TreeItem<String> {
                 }
             }
 
-            File[] files = (File[]) lsCommand.getResponse();
+            FileDTO[] files = (FileDTO[]) lsCommand.getResponse();
             getChildren().clear();
-            for (File file : files) {
+            for (FileDTO file : files) {
                 getChildren().add(new RemoteFileTreeItem(file));
             }
         }

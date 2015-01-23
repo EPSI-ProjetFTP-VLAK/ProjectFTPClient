@@ -1,12 +1,11 @@
 package fr.epsi.widgets.explorer.filetree.local;
 
+import fr.epsi.dto.FileDTO;
 import fr.epsi.widgets.explorer.filetree.FileTreeItem;
-
-import java.io.File;
 
 public class LocalFileTreeItem extends FileTreeItem {
 
-    public LocalFileTreeItem(File file) {
+    public LocalFileTreeItem(FileDTO file) {
         super(file);
     }
 
@@ -19,7 +18,7 @@ public class LocalFileTreeItem extends FileTreeItem {
         this.getChildren().clear();
 
         try {
-            for (File subFile : file.listFiles()) {
+            for (FileDTO subFile : file.getChildren()) {
                 FileTreeItem treeNode = new LocalFileTreeItem(subFile);
                 this.getChildren().add(treeNode);
             }
