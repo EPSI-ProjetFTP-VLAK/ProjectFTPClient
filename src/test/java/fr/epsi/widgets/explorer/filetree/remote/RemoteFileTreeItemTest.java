@@ -56,7 +56,7 @@ public class RemoteFileTreeItemTest extends FileTreeItemTest {
         mockedFtpCommand = Mockito.spy(new CdCommand(fileTreeItem.getValue()));
         Mockito.doReturn(mockedFtpCommand).when((RemoteFileTreeItem) fileTreeItem).createCdCommand();
 
-        Mockito.doReturn(false).doReturn(true).when(mockedCommandQueue).contains(mockedFtpCommand);
+        Mockito.doReturn(true).doReturn(false).when(mockedCommandQueue).contains(mockedFtpCommand);
 
         mockedCommandService = Mockito.mock(CommandService.class);
         Mockito.doReturn(mockedCommandQueue).when(mockedCommandService).getCommandQueue();
