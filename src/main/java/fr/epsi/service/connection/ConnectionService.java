@@ -89,6 +89,10 @@ public class ConnectionService extends FTPService {
         return new PrintWriter(socket.getOutputStream());
     }
 
+    public String getHost() {
+        return host;
+    }
+
     public void setHost(String host) {
         this.host = host;
     }
@@ -99,6 +103,10 @@ public class ConnectionService extends FTPService {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getPort() {
+        return port;
     }
 
     public void setPort(int port) {
