@@ -38,7 +38,7 @@ public class CommandServiceTest extends FTPServiceTest {
     }
 
     @Test
-    public void testOneCommand() throws Exception {
+    public void  testOneCommand() throws Exception {
         FTPCommand mockedFtpCommand = Mockito.mock(FTPCommand.class);
         Mockito.when(mockedFtpCommand.isExecuted()).thenReturn(true);
 

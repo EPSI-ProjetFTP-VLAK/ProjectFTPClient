@@ -28,15 +28,15 @@ public abstract class FTPService extends Service<Void> {
         out.println("exit");
         out.flush();
 
-        socket.close();
+        getSocket().close();
     }
 
     public BufferedReader getSocketBufferedReader() throws IOException {
-        return new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        return new BufferedReader(new InputStreamReader(getSocket().getInputStream()));
     }
 
     public PrintWriter getSocketPrintWriter() throws IOException {
-        return new PrintWriter(socket.getOutputStream());
+        return new PrintWriter(getSocket().getOutputStream());
     }
 
     public TextArea getConsole() {

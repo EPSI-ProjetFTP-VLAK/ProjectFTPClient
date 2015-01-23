@@ -11,6 +11,7 @@ public class FileDTO implements Serializable {
     private File file;
     private List<FileDTO> children = new ArrayList<FileDTO>();
     private boolean isDirectory;
+    private File destination;
 
     public FileDTO(File file, boolean recursive) {
         this.name = file.getName();
@@ -62,5 +63,13 @@ public class FileDTO implements Serializable {
 
     public void setChildren(List<FileDTO> children) {
         this.children = children;
+    }
+
+    public File getDestination() {
+        return destination;
+    }
+
+    public void setDestination(File destination) {
+        this.destination = destination;
     }
 }

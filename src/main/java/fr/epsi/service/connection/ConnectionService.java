@@ -6,7 +6,6 @@ import javafx.scene.control.TextArea;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -79,14 +78,6 @@ public class ConnectionService extends FTPService {
 
     public Socket createSocket() throws IOException {
         return new Socket(host, port);
-    }
-
-    public BufferedReader getSocketBufferedReader() throws IOException {
-        return new BufferedReader(new InputStreamReader(socket.getInputStream()));
-    }
-
-    public PrintWriter getSocketPrintWriter() throws IOException {
-        return new PrintWriter(socket.getOutputStream());
     }
 
     public String getHost() {
