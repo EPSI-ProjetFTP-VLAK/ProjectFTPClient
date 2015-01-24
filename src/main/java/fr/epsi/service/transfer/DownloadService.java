@@ -30,6 +30,12 @@ public class DownloadService extends FTPService {
                 try {
                     while (!isCancelled()) {
                         downloadNextFile();
+
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+
+                        }
                     }
 
                     disconnect();

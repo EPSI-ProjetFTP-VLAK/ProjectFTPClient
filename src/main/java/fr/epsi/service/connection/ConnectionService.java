@@ -7,7 +7,9 @@ import javafx.scene.control.TextArea;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 
 public class ConnectionService extends FTPService {
     private String host;
@@ -77,7 +79,11 @@ public class ConnectionService extends FTPService {
     }
 
     public Socket createSocket() throws IOException {
-        return new Socket(host, port);
+        SocketAddress socketAddress = new InetSocketAddress(host, port);
+        Socket socket = new Socket();
+        socket.connect(socketAddress, 10000);
+
+        return socket;
     }
 
     public String getHost() {

@@ -28,6 +28,12 @@ public class CommandService extends FTPService {
             protected Void call() throws Exception {
                 while (!isCancelled()) {
                     executeNextCommand();
+
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+
+                    }
                 }
 
                 disconnect();
@@ -45,12 +51,6 @@ public class CommandService extends FTPService {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }
-
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-
                 }
             }
         };
