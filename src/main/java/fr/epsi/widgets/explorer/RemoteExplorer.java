@@ -12,7 +12,7 @@ public class RemoteExplorer extends AbstractExplorer {
 
     @Override
     public void doOnFileDrop(DragEvent dragEvent) {
-        System.out.println("down");
+        System.out.println();
     }
 
     @Override

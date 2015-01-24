@@ -1,9 +1,14 @@
 package fr.epsi.widgets.explorer;
 
 import com.sun.javafx.scene.control.skin.TreeCellSkin;
+import fr.epsi.dto.FileDTO;
 import fr.epsi.widgets.explorer.filetree.FileTreeCell;
+import fr.epsi.widgets.explorer.filetree.FileTreeItem;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.control.TreeCell;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -12,6 +17,8 @@ import javafx.scene.input.TransferMode;
 import javafx.util.Callback;
 
 public abstract class AbstractExplorer extends TreeView<String> {
+
+    protected FileDTO draggedFile;
 
     public AbstractExplorer() {
         assignCellFactory();
@@ -42,6 +49,15 @@ public abstract class AbstractExplorer extends TreeView<String> {
     }
 
     private void setupDragAndDrop() {
+        getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<String>>() {
+            @Override
+            public void changed(ObservableValue<? extends TreeItem<String>> observableValue, TreeItem<String> stringTreeItem, TreeItem<String> treeItem) {
+                if (treeItem instanceof FileTreeItem) {
+                    draggedFile = ((FileTreeItem) treeItem).getFile();
+                }
+            }
+        });
+
         setOnDragEntered(new EventHandler<DragEvent>() {
             public void handle(DragEvent event) {
                 if (isSourceDifferentToTarget(event)) {
