@@ -9,6 +9,13 @@ public abstract class FileTreeCell extends TreeCell<String> {
     public FileTreeCell() {
         setupDragAndDrop();
 
+        setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                System.out.println("ok");
+            }
+        });
+
         setStyle("-fx-background-color: transparent;");
     }
 

@@ -13,6 +13,8 @@ public class FileDTO implements Serializable {
     private boolean isDirectory;
     private File destination;
 
+    public FileDTO() {}
+
     public FileDTO(File file, boolean recursive) {
         this.name = file.getName();
         this.file = file;

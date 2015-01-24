@@ -66,6 +66,7 @@ public class DownloadServiceTest extends FTPServiceTest {
         Mockito.doReturn(mockedFileOutputStream).when(mockedDownloadService).getFileOutputStream(fileToDownload);
 
         mockedDownloadService.getDownloadQueue().offer(fileToDownload);
+        mockedDownloadService.setSocket(mockedSocket);
 
         mockedDownloadService.start();
 

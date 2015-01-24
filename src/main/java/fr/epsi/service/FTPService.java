@@ -24,11 +24,13 @@ public abstract class FTPService extends Service<Void> {
     protected void disconnect() throws IOException {
         console.appendText("Disconnecting...");
 
-        PrintWriter out = getSocketPrintWriter();
-        out.println("exit");
-        out.flush();
+        if (socket != null && !getSocket().isClosed()) {
+            PrintWriter out = getSocketPrintWriter();
+            out.println("exit");
+            out.flush();
 
-        getSocket().close();
+            getSocket().close();
+        }
     }
 
     public BufferedReader getSocketBufferedReader() throws IOException {

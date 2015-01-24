@@ -1,10 +1,14 @@
 package fr.epsi;
 
+import fr.epsi.controller.MainController;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class Main extends Application {
 
@@ -16,6 +20,17 @@ public class Main extends Application {
 
         Scene mainScene = new Scene(root, 800, 800);
         mainScene.getStylesheets().add(getClass().getClassLoader().getResource("stylesheet/main.css").toExternalForm());
+
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                MainController.getDownloadService().cancel();
+                MainController.getCommandService().cancel();
+                MainController.getConnectionService().cancel();
+
+                Platform.exit();
+            }
+        });
 
         primaryStage.setScene(mainScene);
         primaryStage.show();
