@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 
 public class MainController implements Initializable {
     private Socket socket;
-    private ExecutorService executorService;
+    private static ExecutorService executorService;
     private static ConnectionService connectionService;
     private static CommandService commandService;
     private static DownloadService downloadService;
@@ -37,6 +37,10 @@ public class MainController implements Initializable {
         downloadService = new DownloadService(socket, console);
         downloadService.setExecutor(executorService);
         downloadService.start();
+    }
+
+    public static ExecutorService getExecutorService() {
+        return executorService;
     }
 
     public static ConnectionService getConnectionService() {

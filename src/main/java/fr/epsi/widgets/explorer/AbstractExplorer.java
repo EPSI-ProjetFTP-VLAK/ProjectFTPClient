@@ -1,19 +1,15 @@
 package fr.epsi.widgets.explorer;
 
-import com.sun.javafx.scene.control.skin.TreeCellSkin;
 import fr.epsi.dto.FileDTO;
 import fr.epsi.widgets.explorer.filetree.FileTreeCell;
 import fr.epsi.widgets.explorer.filetree.FileTreeItem;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
 import javafx.util.Callback;
 
 public abstract class AbstractExplorer extends TreeView<String> {
@@ -26,7 +22,7 @@ public abstract class AbstractExplorer extends TreeView<String> {
     }
 
     public abstract void doOnFileDrag(MouseEvent mouseEvent);
-    public abstract void doOnFileDrop(DragEvent dragEvent);
+    public abstract void doOnFileDrop(FileTreeItem fileTreeItem, DragEvent dragEvent);
     public abstract void initializeNodes();
 
     private void assignCellFactory() {
@@ -40,8 +36,8 @@ public abstract class AbstractExplorer extends TreeView<String> {
                     }
 
                     @Override
-                    protected void doOnDrop(DragEvent dragEvent) {
-                        doOnFileDrop(dragEvent);
+                    protected void doOnDrop(FileTreeItem fileTreeItem, DragEvent dragEvent) {
+                        doOnFileDrop(fileTreeItem, dragEvent);
                     }
                 };
             }
@@ -57,44 +53,5 @@ public abstract class AbstractExplorer extends TreeView<String> {
                 }
             }
         });
-
-        setOnDragEntered(new EventHandler<DragEvent>() {
-            public void handle(DragEvent event) {
-                if (isSourceDifferentToTarget(event)) {
-                    getStyleClass().add("hovered");
-                }
-
-                event.consume();
-            }
-        });
-
-        setOnDragOver(new EventHandler<DragEvent>() {
-            public void handle(DragEvent event) {
-                if (isSourceDifferentToTarget(event)) {
-                    event.acceptTransferModes(TransferMode.ANY);
-                }
-
-                event.consume();
-            }
-        });
-
-        setOnDragDropped(new EventHandler<DragEvent>() {
-            @Override public void handle(DragEvent event) {
-                Dragboard db = event.getDragboard();
-
-                if (event.getTarget() instanceof TreeCellSkin) {
-                    FileTreeCell fileTreeCell = (FileTreeCell) ((TreeCellSkin) event.getTarget()).getParent();
-
-                    fileTreeCell.getTreeView().getStyleClass().remove("hovered");
-                }
-
-                event.setDropCompleted(true);
-                event.consume();
-            }
-        });
-    }
-
-    private boolean isSourceDifferentToTarget(DragEvent event) {
-        return !((FileTreeCell) event.getGestureSource()).getTreeView().getId().equals(getId());
     }
 }

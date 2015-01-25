@@ -28,6 +28,8 @@ public class Main extends Application {
                 MainController.getCommandService().cancel();
                 MainController.getConnectionService().cancel();
 
+                MainController.getExecutorService().shutdown();
+
                 Platform.exit();
             }
         });

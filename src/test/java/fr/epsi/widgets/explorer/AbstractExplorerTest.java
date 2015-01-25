@@ -1,5 +1,6 @@
 package fr.epsi.widgets.explorer;
 
+import fr.epsi.widgets.explorer.filetree.FileTreeItem;
 import javafx.scene.control.TreeItem;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
@@ -19,7 +20,7 @@ public class AbstractExplorerTest {;
             }
 
             @Override
-            public void doOnFileDrop(DragEvent dragEvent) {
+            public void doOnFileDrop(FileTreeItem fileTreeItem, DragEvent dragEvent) {
 
             }
 
