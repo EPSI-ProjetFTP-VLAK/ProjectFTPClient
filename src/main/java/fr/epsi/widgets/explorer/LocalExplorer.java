@@ -1,6 +1,8 @@
 package fr.epsi.widgets.explorer;
 
+import fr.epsi.controller.MainController;
 import fr.epsi.dto.FileDTO;
+import fr.epsi.service.command.commands.DownloadCommand;
 import fr.epsi.widgets.explorer.filetree.FileTreeItem;
 import fr.epsi.widgets.explorer.filetree.local.LocalFileTreeItem;
 import javafx.scene.input.DragEvent;
@@ -21,8 +23,16 @@ public class LocalExplorer extends AbstractExplorer {
     }
 
     @Override
-    public void doOnFileDrop(FileTreeItem fileTreeItem, DragEvent dragEvent) {
-        
+    public void doOnFileDrop(FileTreeItem sourceFileTreeItem, FileTreeItem targetFileTreeItem, DragEvent dragEvent) {
+        FileDTO fileDTO = sourceFileTreeItem.getFileDTO();
+        fileDTO.setDestination(new File(targetFileTreeItem.getFileDTO().getFile().toPath().toString() + System.getProperty("file.separator") + fileDTO.getName()));
+
+        DownloadCommand downloadCommand = createDownloadCommand(fileDTO);
+        MainController.getCommandService().getCommandQueue().offer(downloadCommand);
+    }
+
+    public DownloadCommand createDownloadCommand(FileDTO fileDTO) {
+        return new DownloadCommand(fileDTO);
     }
 
     @Override

@@ -16,7 +16,7 @@ public class RemoteExplorer extends AbstractExplorer {
     }
 
     @Override
-    public void doOnFileDrop(FileTreeItem fileTreeItem, DragEvent dragEvent) {
+    public void doOnFileDrop(FileTreeItem sourceFileTreeItem, FileTreeItem targetFileTreeItem, DragEvent dragEvent) {
         System.out.println("up");
     }
 

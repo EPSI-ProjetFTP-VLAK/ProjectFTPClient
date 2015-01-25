@@ -1,6 +1,12 @@
 package fr.epsi.widgets.explorer;
 
+import fr.epsi.controller.MainController;
+import fr.epsi.dto.FileDTO;
+import fr.epsi.service.command.commands.DownloadCommand;
+import fr.epsi.widgets.explorer.filetree.FileTreeItem;
+import fr.epsi.widgets.explorer.filetree.local.LocalFileTreeItem;
 import javafx.scene.control.TreeItem;
+import javafx.scene.input.DragEvent;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +22,7 @@ import java.io.File;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(FileSystemView.class)
+@PrepareForTest({FileSystemView.class, MainController.class})
 public class LocalExplorerTest extends AbstractExplorerTest {
 
     public static final String HOSTNAME = "test-computer";
@@ -29,6 +35,8 @@ public class LocalExplorerTest extends AbstractExplorerTest {
 
     @Before
     public void setUp() throws Exception {
+        super.setUp();
+
         testRoots = new File[2];
 
         File firstDirectoryMock = Mockito.spy(new File("test-directory-1"));
@@ -62,5 +70,27 @@ public class LocalExplorerTest extends AbstractExplorerTest {
         assertEquals(HOSTNAME, rootNode.getValue());
         assertEquals(testRoots[0].getName(), rootNode.getChildren().get(0).getValue());
         assertEquals(testRoots[1].getName(), rootNode.getChildren().get(1).getValue());
+    }
+
+    @Test
+    public void testDoOnFileDrop() throws Exception {
+        assertEquals(0, mockedCommandQueue.size());
+
+        FileDTO mockedSourceFileDTO = Mockito.spy(new FileDTO(new File("test-remote-file")));
+        FileTreeItem mockedSourceFileTreeItem = Mockito.spy(new LocalFileTreeItem(mockedSourceFileDTO));
+
+        File mockedTargetFile = Mockito.spy(new File("test-local-directory"));
+        FileDTO mockedTargetFileDTO = Mockito.spy(new FileDTO(mockedTargetFile));
+        FileTreeItem mockedTargetFileTreeItem = Mockito.spy(new LocalFileTreeItem(mockedTargetFileDTO));
+
+        DownloadCommand mockedDownloadCommand = Mockito.spy(new DownloadCommand(mockedSourceFileDTO));
+        Mockito.doReturn(mockedDownloadCommand).when((LocalExplorer) explorer).createDownloadCommand(mockedSourceFileDTO);
+
+        explorer.doOnFileDrop(mockedSourceFileTreeItem, mockedTargetFileTreeItem, Mockito.mock(DragEvent.class));
+
+        assertEquals(mockedTargetFile.getName() + System.getProperty("file.separator") + mockedSourceFileDTO.getName(), mockedSourceFileDTO.getDestination().toPath().toString());
+
+        Mockito.verify(mockedCommandQueue, Mockito.times(1)).offer(mockedDownloadCommand);
+        assertEquals(1, mockedCommandQueue.size());
     }
 }

@@ -55,7 +55,7 @@ public abstract class FileTreeItem extends TreeItem<String> {
         return !file.isDirectory();
     }
 
-    public FileDTO getFile() {
+    public FileDTO getFileDTO() {
         return file;
     }
 }

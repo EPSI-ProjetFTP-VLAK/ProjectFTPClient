@@ -15,7 +15,7 @@ public abstract class FileTreeCell extends TreeCell<String> {
     }
 
     protected abstract void doOnDrag(MouseEvent mouseEvent);
-    protected abstract void doOnDrop(FileTreeItem fileTreeItem, DragEvent dragEvent);
+    protected abstract void doOnDrop(FileTreeItem sourceFileTreeItem, FileTreeItem targetFileTreeItem, DragEvent dragEvent);
 
     private void setupDragAndDrop() {
         setOnDragDetected(new EventHandler<MouseEvent>() {
@@ -63,15 +63,22 @@ public abstract class FileTreeCell extends TreeCell<String> {
             @Override public void handle(DragEvent dragEvent) {
                 Dragboard db = dragEvent.getDragboard();
 
-                FileTreeItem fileTreeItem = null;
-                if (((Node) dragEvent.getTarget()).getParent() instanceof TreeCellSkin) {
-                    FileTreeCell fileTreeCell = (FileTreeCell) ((Node) dragEvent.getTarget()).getParent().getParent();
-                    fileTreeItem = (FileTreeItem) fileTreeCell.getTreeView().getTreeItem(fileTreeCell.getIndex());
+                if (((Node) dragEvent.getTarget()).getParent() instanceof TreeCellSkin
+                        && dragEvent.getSource() instanceof FileTreeCell) {
+                    FileTreeCell targetFileTreeCell = (FileTreeCell) ((Node) dragEvent.getTarget()).getParent().getParent();
+                    FileTreeItem targetFileTreeItem = (FileTreeItem) targetFileTreeCell.getTreeView().getTreeItem(targetFileTreeCell.getIndex());
 
-                    fileTreeCell.getStyleClass().remove("hovered");
+                    FileTreeCell sourceFileTreeCell = ((FileTreeCell) dragEvent.getSource());
+                    FileTreeItem sourceFileTreeItem = (FileTreeItem) sourceFileTreeCell.getTreeView().getTreeItem(sourceFileTreeCell.getIndex());
+
+                    if (sourceFileTreeItem.isLeaf()) {
+                        return;
+                    }
+
+                    targetFileTreeCell.getStyleClass().remove("hovered");
+
+                    doOnDrop(sourceFileTreeItem, targetFileTreeItem, dragEvent);
                 }
-
-                doOnDrop(fileTreeItem, dragEvent);
 
                 dragEvent.setDropCompleted(true);
                 dragEvent.consume();

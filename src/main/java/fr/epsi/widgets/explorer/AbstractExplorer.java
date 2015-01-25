@@ -22,7 +22,7 @@ public abstract class AbstractExplorer extends TreeView<String> {
     }
 
     public abstract void doOnFileDrag(MouseEvent mouseEvent);
-    public abstract void doOnFileDrop(FileTreeItem fileTreeItem, DragEvent dragEvent);
+    public abstract void doOnFileDrop(FileTreeItem sourceFileTreeItem, FileTreeItem targetFileTreeItem, DragEvent dragEvent);
     public abstract void initializeNodes();
 
     private void assignCellFactory() {
@@ -36,8 +36,8 @@ public abstract class AbstractExplorer extends TreeView<String> {
                     }
 
                     @Override
-                    protected void doOnDrop(FileTreeItem fileTreeItem, DragEvent dragEvent) {
-                        doOnFileDrop(fileTreeItem, dragEvent);
+                    protected void doOnDrop(FileTreeItem sourceFileTreeItem, FileTreeItem targetFileTreeItem, DragEvent dragEvent) {
+                        doOnFileDrop(sourceFileTreeItem, targetFileTreeItem, dragEvent);
                     }
                 };
             }
@@ -49,7 +49,7 @@ public abstract class AbstractExplorer extends TreeView<String> {
             @Override
             public void changed(ObservableValue<? extends TreeItem<String>> observableValue, TreeItem<String> stringTreeItem, TreeItem<String> treeItem) {
                 if (treeItem instanceof FileTreeItem) {
-                    draggedFile = ((FileTreeItem) treeItem).getFile();
+                    draggedFile = ((FileTreeItem) treeItem).getFileDTO();
                 }
             }
         });
