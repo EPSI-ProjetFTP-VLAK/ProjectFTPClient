@@ -1,5 +1,7 @@
 package fr.epsi.service.command.commands;
 
+import fr.epsi.dto.FileDTO;
+
 import java.io.*;
 
 public class LsCommand extends FTPCommand {
@@ -15,7 +17,7 @@ public class LsCommand extends FTPCommand {
             String[] socketResponse = stringIn.readLine().split(":");
 
             int numberOfFiles = Integer.valueOf(socketResponse[1]);
-            response = new File[numberOfFiles];
+            response = new FileDTO[numberOfFiles];
             for (int fileIndex = 0; fileIndex < numberOfFiles; fileIndex++) {
                 response[fileIndex] = readFileFromSocket();
             }
@@ -26,9 +28,9 @@ public class LsCommand extends FTPCommand {
         super.execute();
     }
 
-    public File readFileFromSocket() throws IOException, ClassNotFoundException {
+    public FileDTO readFileFromSocket() throws IOException, ClassNotFoundException {
         ObjectInputStream objectIn = getSocketObjectInputStream();
 
-        return (File) objectIn.readObject();
+        return (FileDTO) objectIn.readObject();
     }
 }

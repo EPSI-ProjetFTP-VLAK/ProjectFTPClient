@@ -1,5 +1,6 @@
 package fr.epsi.service.command.commands;
 
+import fr.epsi.dto.FileDTO;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +11,7 @@ import java.io.File;
 import static org.junit.Assert.assertEquals;
 
 public class LsCommandTest extends FTPCommandTest {
-    private File[] mockedFiles;
+    private FileDTO[] mockedFiles;
 
     public LsCommandTest() {
         super(Mockito.spy(new LsCommand()));
@@ -25,11 +26,11 @@ public class LsCommandTest extends FTPCommandTest {
     public void setUp() throws Exception {
         super.setUp();
 
-        mockedFiles = new File[4];
-        mockedFiles[0] = Mockito.spy(new File("file-1"));
-        mockedFiles[1] = Mockito.spy(new File("file-2"));
-        mockedFiles[2] = Mockito.spy(new File("file-3"));
-        mockedFiles[3] = Mockito.spy(new File("file-4"));
+        mockedFiles = new FileDTO[4];
+        mockedFiles[0] = Mockito.spy(new FileDTO(new File("file-1")));
+        mockedFiles[1] = Mockito.spy(new FileDTO(new File("file-2")));
+        mockedFiles[2] = Mockito.spy(new FileDTO(new File("file-3")));
+        mockedFiles[3] = Mockito.spy(new FileDTO(new File("file-4")));
 
         Mockito.doReturn("ls:" + mockedFiles.length).when(mockedBufferedReader).readLine();
 
@@ -54,7 +55,7 @@ public class LsCommandTest extends FTPCommandTest {
 
         Mockito.verify((LsCommand) mockedFtpCommand, Mockito.times(4)).readFileFromSocket();
 
-        File[] ftpCommandResponse = (File[]) mockedFtpCommand.getResponse();
+        FileDTO[] ftpCommandResponse = (FileDTO[]) mockedFtpCommand.getResponse();
         for (int i = 0; i < ftpCommandResponse.length; i++) {
             assertEquals(mockedFiles[i], ftpCommandResponse[i]);
         }
