@@ -1,8 +1,12 @@
 package fr.epsi.service.transfer;
 
 import fr.epsi.dto.FileDTO;
+import fr.epsi.dto.TransferDTO;
 import fr.epsi.service.FTPServiceTest;
+import fr.epsi.widgets.transfer.TransferQueue;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +29,9 @@ import static org.junit.Assert.assertNotNull;
 public class DownloadServiceTest extends FTPServiceTest {
     private Queue<FileDTO> downloadQueue;
     private DownloadService mockedDownloadService;
+    private TransferQueue mockedTransferQueue;
+    private ObservableList mockedTransferDTOs;
+    private TransferDTO mockedTransferDTO;
     private BufferedInputStream mockedBufferedInputStream;
     private FileOutputStream mockedFileOutputStream;
     private FileDTO fileToDownload;
@@ -41,6 +48,11 @@ public class DownloadServiceTest extends FTPServiceTest {
 
         mockedDownloadService.setConsole(mockedConsole);
 
+        mockedTransferDTOs = Mockito.spy(FXCollections.observableArrayList());
+        mockedTransferQueue = Mockito.mock(TransferQueue.class);
+        Mockito.doReturn(mockedTransferDTOs).when(mockedTransferQueue).getTransferDTOs();
+        mockedDownloadService.setTransferQueue(mockedTransferQueue);
+
         Mockito.doReturn(mockedSocket).when(mockedDownloadService).createSocket();
 
         downloadQueue = Mockito.spy(new PriorityQueue<FileDTO>());
@@ -55,13 +67,21 @@ public class DownloadServiceTest extends FTPServiceTest {
     @Test
     public void testOneDownload() throws Exception {
         byte[] destinationBuffer = new byte[1024];
-        byte[] dataBytes = "test".getBytes();
-        int dataBytesLength = dataBytes.length;
-        Mockito.when(mockedBufferedInputStream.read(destinationBuffer, 0, 1024)).thenReturn(dataBytesLength).thenReturn(-1);
+        long sourceFileLength = 10000L;
 
         fileToDownload = Mockito.mock(FileDTO.class);
+
+        File sourceFile = Mockito.spy(new File("/test-destination-file"));
+        Mockito.doReturn(sourceFileLength).when(sourceFile).length();
+        Mockito.doReturn(sourceFile).when(fileToDownload).getFile();
+
         File destinationFile = Mockito.spy(new File("/test-destination-file"));
         Mockito.doReturn(destinationFile).when(fileToDownload).getDestination();
+
+        Mockito.when(mockedBufferedInputStream.read(destinationBuffer, 0, 1024)).thenReturn((int) sourceFileLength).thenReturn(-1);
+
+        mockedTransferDTO = Mockito.spy(new TransferDTO(fileToDownload));
+        Mockito.doReturn(mockedTransferDTO).when(mockedDownloadService).createTransferDTO(fileToDownload);
 
         Mockito.doReturn(mockedFileOutputStream).when(mockedDownloadService).getFileOutputStream(fileToDownload);
 
@@ -70,9 +90,13 @@ public class DownloadServiceTest extends FTPServiceTest {
 
         mockedDownloadService.start();
 
-        while (downloadQueue.size() > 0) {}
+        while (mockedTransferDTO.getProgress() < 1) {}
 
-        Mockito.verify(mockedFileOutputStream, Mockito.times(1)).write(destinationBuffer, 0, dataBytesLength);
+        Mockito.verify(mockedTransferDTOs, Mockito.times(1)).add(mockedTransferDTO);
+
+        Mockito.verify(mockedTransferDTO, Mockito.atLeast(1)).setProgress(Mockito.anyDouble());
+
+        Mockito.verify(mockedFileOutputStream, Mockito.times(1)).write(destinationBuffer, 0, (int) sourceFileLength);
     }
 
     @Test
