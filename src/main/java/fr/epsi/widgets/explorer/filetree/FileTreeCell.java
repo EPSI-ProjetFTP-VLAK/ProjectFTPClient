@@ -68,10 +68,10 @@ public abstract class FileTreeCell extends TreeCell<String> {
                     FileTreeCell targetFileTreeCell = (FileTreeCell) ((Node) dragEvent.getTarget()).getParent().getParent();
                     FileTreeItem targetFileTreeItem = (FileTreeItem) targetFileTreeCell.getTreeView().getTreeItem(targetFileTreeCell.getIndex());
 
-                    FileTreeCell sourceFileTreeCell = ((FileTreeCell) dragEvent.getSource());
+                    FileTreeCell sourceFileTreeCell = ((FileTreeCell) dragEvent.getGestureSource());
                     FileTreeItem sourceFileTreeItem = (FileTreeItem) sourceFileTreeCell.getTreeView().getTreeItem(sourceFileTreeCell.getIndex());
 
-                    if (sourceFileTreeItem.isLeaf()) {
+                    if (targetFileTreeItem.isLeaf()) {
                         return;
                     }
 
