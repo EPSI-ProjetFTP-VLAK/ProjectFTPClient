@@ -1,19 +1,29 @@
-package fr.epsi.dto;
+package fr.epsi.service.transfer.thread;
 
-public class TransferDTO {
+import fr.epsi.dto.FileDTO;
 
-    private String file;
-    private double progress;
-    private double bandwidth;
-    private double size;
-    private String destination;
+public class TransferThread extends Thread {
 
-    public TransferDTO(FileDTO fileDTO) {
+    protected FileDTO fileDTO;
+    protected String file;
+    protected double progress;
+    protected double bandwidth;
+    protected double size;
+    protected String destination;
+
+    public TransferThread(FileDTO fileDTO) {
+        this.fileDTO = fileDTO;
+
         file = fileDTO.getName();
         progress = 0;
         bandwidth = 0;
         size = fileDTO.getFile().getTotalSpace();
         destination = fileDTO.getDestination().toString();
+    }
+
+    @Override
+    public void run() {
+        progress = 1;
     }
 
     public String getFile() {

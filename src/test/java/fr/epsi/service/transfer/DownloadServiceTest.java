@@ -1,8 +1,8 @@
 package fr.epsi.service.transfer;
 
 import fr.epsi.dto.FileDTO;
-import fr.epsi.dto.TransferDTO;
 import fr.epsi.service.FTPServiceTest;
+import fr.epsi.service.transfer.thread.DownloadThread;
 import fr.epsi.widgets.transfer.TransferQueue;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -14,9 +14,7 @@ import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.net.Socket;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -27,14 +25,11 @@ import static org.junit.Assert.assertNotNull;
 @PrepareForTest(Platform.class)
 @RunWith(PowerMockRunner.class)
 public class DownloadServiceTest extends FTPServiceTest {
-    private Queue<FileDTO> downloadQueue;
+    private Queue<FileDTO> mockedDownloadQueue;
     private DownloadService mockedDownloadService;
     private TransferQueue mockedTransferQueue;
-    private ObservableList mockedTransferDTOs;
-    private TransferDTO mockedTransferDTO;
-    private BufferedInputStream mockedBufferedInputStream;
-    private FileOutputStream mockedFileOutputStream;
-    private FileDTO fileToDownload;
+    private ObservableList mockedTransferThreads;
+    private DownloadThread mockedDownloadThread;
 
     public DownloadServiceTest() {
         super(Mockito.spy(new DownloadService()));
@@ -48,55 +43,44 @@ public class DownloadServiceTest extends FTPServiceTest {
 
         mockedDownloadService.setConsole(mockedConsole);
 
-        mockedTransferDTOs = Mockito.spy(FXCollections.observableArrayList());
+        mockedTransferThreads = Mockito.spy(FXCollections.observableArrayList());
         mockedTransferQueue = Mockito.mock(TransferQueue.class);
-        Mockito.doReturn(mockedTransferDTOs).when(mockedTransferQueue).getTransferDTOs();
+        Mockito.doReturn(mockedTransferThreads).when(mockedTransferQueue).getTransferThreads();
         mockedDownloadService.setTransferQueue(mockedTransferQueue);
 
         Mockito.doReturn(mockedSocket).when(mockedDownloadService).createSocket();
 
-        downloadQueue = Mockito.spy(new PriorityQueue<FileDTO>());
-        mockedDownloadService.setDownloadQueue(downloadQueue);
+        mockedDownloadQueue = Mockito.spy(new PriorityQueue<FileDTO>());
+        mockedDownloadService.setDownloadQueue(mockedDownloadQueue);
+    }
 
-        mockedBufferedInputStream = Mockito.mock(BufferedInputStream.class);
-        Mockito.doReturn(mockedBufferedInputStream).when(mockedDownloadService).getSocketBufferedInputStream();
+    @Override
+    public void tearDown() throws Exception {
+        mockedSocket.close();
 
-        mockedFileOutputStream = Mockito.mock(FileOutputStream.class);
+        super.tearDown();
     }
 
     @Test
     public void testOneDownload() throws Exception {
-        byte[] destinationBuffer = new byte[1024];
-        long sourceFileLength = 10000L;
-
-        fileToDownload = Mockito.mock(FileDTO.class);
+        FileDTO mockedFileDTO = Mockito.mock(FileDTO.class);
 
         File sourceFile = Mockito.spy(new File("/test-destination-file"));
-        Mockito.doReturn(sourceFileLength).when(sourceFile).length();
-        Mockito.doReturn(sourceFile).when(fileToDownload).getFile();
+        Mockito.doReturn(sourceFile).when(mockedFileDTO).getFile();
 
         File destinationFile = Mockito.spy(new File("/test-destination-file"));
-        Mockito.doReturn(destinationFile).when(fileToDownload).getDestination();
+        Mockito.doReturn(destinationFile).when(mockedFileDTO).getDestination();
 
-        Mockito.when(mockedBufferedInputStream.read(destinationBuffer, 0, 1024)).thenReturn((int) sourceFileLength).thenReturn(-1);
+        mockedDownloadThread = Mockito.mock(DownloadThread.class);
+        Mockito.doReturn(mockedDownloadThread).when(mockedDownloadService).createDownloadThread(mockedFileDTO);
 
-        mockedTransferDTO = Mockito.spy(new TransferDTO(fileToDownload));
-        Mockito.doReturn(mockedTransferDTO).when(mockedDownloadService).createTransferDTO(fileToDownload);
-
-        Mockito.doReturn(mockedFileOutputStream).when(mockedDownloadService).getFileOutputStream(fileToDownload);
-
-        mockedDownloadService.getDownloadQueue().offer(fileToDownload);
-        mockedDownloadService.setSocket(mockedSocket);
-
+        mockedDownloadQueue.offer(mockedFileDTO);
         mockedDownloadService.start();
 
-        while (mockedTransferDTO.getProgress() < 1) {}
+        Thread.sleep(1000);
 
-        Mockito.verify(mockedTransferDTOs, Mockito.times(1)).add(mockedTransferDTO);
-
-        Mockito.verify(mockedTransferDTO, Mockito.atLeast(1)).setProgress(Mockito.anyDouble());
-
-        Mockito.verify(mockedFileOutputStream, Mockito.times(1)).write(destinationBuffer, 0, (int) sourceFileLength);
+        Mockito.verify(mockedTransferThreads, Mockito.times(1)).add(mockedDownloadThread);
+        Mockito.verify(mockedDownloadThread, Mockito.times(1)).start();
     }
 
     @Test

@@ -1,8 +1,11 @@
 package fr.epsi.widgets.transfer;
 
-import fr.epsi.dto.TransferDTO;
+import fr.epsi.service.transfer.thread.TransferThread;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.ProgressBarTableCell;
@@ -10,40 +13,51 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 public class TransferQueue extends TableView {
 
-    ObservableList<TransferDTO> transferDTOs = FXCollections.observableArrayList();
+    ObservableList<Thread> transferThreads = FXCollections.observableArrayList();
 
     public TransferQueue() {
         generateColumns();
+        generateContextMenu();
 
-        setItems(transferDTOs);
+        setItems(transferThreads);
     }
 
     private void generateColumns() {
         // Colonne Fichier
         TableColumn fileColumn = new TableColumn("Fichier");
-        fileColumn.setCellValueFactory(new PropertyValueFactory<TransferDTO, String>("file"));
+        fileColumn.setCellValueFactory(new PropertyValueFactory<TransferThread, String>("file"));
 
         // Colonne Progression
         TableColumn progressColumn = new TableColumn("Progression");
-        progressColumn.setCellValueFactory(new PropertyValueFactory<TransferDTO, String>("progress"));
-        progressColumn.setCellFactory(ProgressBarTableCell.<TransferDTO> forTableColumn());
+        progressColumn.setCellValueFactory(new PropertyValueFactory<TransferThread, Double>("progress"));
+        progressColumn.setCellFactory(ProgressBarTableCell.<TransferThread> forTableColumn());
 
         // Colonne Débit
         TableColumn bandwidthColumn = new TableColumn("Débit");
-        bandwidthColumn.setCellValueFactory(new PropertyValueFactory<TransferDTO, String>("bandwidth"));
+        bandwidthColumn.setCellValueFactory(new PropertyValueFactory<TransferThread, Double>("bandwidth"));
 
         // Colonne Taille
         TableColumn sizeColumn = new TableColumn("Taille");
-        sizeColumn.setCellValueFactory(new PropertyValueFactory<TransferDTO, String>("size"));
+        sizeColumn.setCellValueFactory(new PropertyValueFactory<TransferThread, Double>("size"));
 
         // Colonne Destination
         TableColumn destinationColumn = new TableColumn("Destination");
-        destinationColumn.setCellValueFactory(new PropertyValueFactory<TransferDTO, String>("destination"));
+        destinationColumn.setCellValueFactory(new PropertyValueFactory<TransferThread, String>("destination"));
 
         getColumns().addAll(fileColumn, progressColumn, bandwidthColumn, sizeColumn, destinationColumn);
     }
 
-    public ObservableList<TransferDTO> getTransferDTOs() {
-        return transferDTOs;
+    private void generateContextMenu() {
+        MenuItem cancelMenuItem = new MenuItem("Annuler");
+        cancelMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                getItems().get(getSelectionModel().getSelectedIndex());
+            }
+        });
+    }
+
+    public ObservableList<Thread> getTransferThreads() {
+        return transferThreads;
     }
 }

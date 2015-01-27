@@ -2,14 +2,16 @@ package fr.epsi.service.transfer;
 
 import fr.epsi.controller.MainController;
 import fr.epsi.dto.FileDTO;
-import fr.epsi.dto.TransferDTO;
 import fr.epsi.service.FTPService;
 import fr.epsi.service.connection.ConnectionState;
+import fr.epsi.service.transfer.thread.DownloadThread;
 import fr.epsi.widgets.transfer.TransferQueue;
 import javafx.concurrent.Task;
 import javafx.scene.control.TextArea;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -57,33 +59,19 @@ public class DownloadService extends FTPService {
                 if (downloadQueue.size() > 0) {
                     FileDTO file = downloadQueue.poll();
 
-                    TransferDTO transferDTO = createTransferDTO(file);
-                    transferQueue.getTransferDTOs().add(transferDTO);
+                    Thread downloadThread = createDownloadThread(file);
+                    transferQueue.getTransferThreads().add(downloadThread);
+
+                    downloadThread.start();
 
                     console.appendText("Downloading " + file.getName() + "...");
-
-                    byte[] bytes = new byte[1024];
-                    int length = 0;
-                    int byteCount = 1024;
-
-                    FileOutputStream outputFileStream = getFileOutputStream(file);
-                    BufferedInputStream bufferedInputStream = getSocketBufferedInputStream();
-
-                    while ((length = bufferedInputStream.read(bytes, 0, 1024)) != -1) {
-                        byteCount += 1024;
-                        outputFileStream.write(bytes, 0, length);
-
-                        transferDTO.setProgress((double) byteCount / file.getFile().length());
-                    }
-
-                    transferDTO.setProgress(1);
                 }
             }
         };
     }
 
-    public TransferDTO createTransferDTO(FileDTO file) {
-        return new TransferDTO(file);
+    public DownloadThread createDownloadThread(FileDTO fileDTO) throws IOException {
+        return new DownloadThread(fileDTO, getSocketBufferedInputStream(), getFileOutputStream(fileDTO));
     }
 
     public BufferedInputStream getSocketBufferedInputStream() throws IOException {
