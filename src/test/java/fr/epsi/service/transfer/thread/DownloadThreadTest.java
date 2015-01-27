@@ -46,4 +46,16 @@ public class DownloadThreadTest extends TransferThreadTest {
 
         Mockito.verify(mockedFileOutputStream, Mockito.times(1)).write(destinationBuffer, 0, (int) SOURCE_FILE_LENGTH);
     }
+
+    @Test
+    public void testInterrupt() throws Exception {
+        byte[] destinationBuffer = new byte[1024];
+
+        Mockito.when(mockedBufferedInputStream.read(destinationBuffer, 0, 1024)).thenReturn((int) SOURCE_FILE_LENGTH).thenReturn(-1);
+
+        transferThread.run();
+        transferThread.interrupt();
+
+        Mockito.verify(mockedDestinationFile, Mockito.times(1)).delete();
+    }
 }

@@ -5,6 +5,7 @@ import fr.epsi.dto.FileDTO;
 import fr.epsi.service.FTPService;
 import fr.epsi.service.connection.ConnectionState;
 import fr.epsi.service.transfer.thread.DownloadThread;
+import fr.epsi.service.transfer.thread.TransferThread;
 import fr.epsi.widgets.transfer.TransferQueue;
 import javafx.concurrent.Task;
 import javafx.scene.control.TextArea;
@@ -34,37 +35,38 @@ public class DownloadService extends FTPService {
         return new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                try {
-                    while (!isCancelled()) {
-                        downloadNextFile();
+                while (!isCancelled()) {
+                    downloadNextFile();
 
-                        try {
-                            Thread.sleep(500);
-                        } catch (InterruptedException e) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
 
-                        }
                     }
-
-                    disconnect();
-                    updateMessage(ConnectionState.DISCONNECTED.toString());
-                } catch (Exception e) {
-                    console.appendText(e.getMessage() + " !");
-                    e.printStackTrace();
                 }
+
+                disconnect();
+                updateMessage(ConnectionState.DISCONNECTED.toString());
 
                 return null;
             }
 
-            private void downloadNextFile() throws IOException {
+            private void downloadNextFile() {
                 if (downloadQueue.size() > 0) {
                     FileDTO file = downloadQueue.poll();
 
-                    Thread downloadThread = createDownloadThread(file);
-                    transferQueue.getTransferThreads().add(downloadThread);
+                    try {
+                        TransferThread downloadThread = createDownloadThread(file);
+                        transferQueue.getTransferThreads().add(downloadThread);
 
-                    downloadThread.start();
+                        downloadThread.start();
+                    } catch (IOException e) {
+                        console.appendText("Connection error !\n");
+                        e.printStackTrace();
+                    }
 
-                    console.appendText("Downloading " + file.getName() + "...");
+
+                    console.appendText("Downloading " + file.getName() + "...\n");
                 }
             }
         };

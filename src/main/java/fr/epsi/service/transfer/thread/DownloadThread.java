@@ -25,7 +25,7 @@ public class DownloadThread extends TransferThread {
         int byteCount = 1024;
 
         try {
-            while ((length = bufferedInputStream.read(bytes, 0, 1024)) != -1) {
+            while ((length = bufferedInputStream.read(bytes, 0, 1024)) != -1 && !isInterrupted()) {
                 byteCount += 1024;
                 fileOutputStream.write(bytes, 0, length);
 
@@ -36,5 +36,12 @@ public class DownloadThread extends TransferThread {
         }
 
         super.run();
+    }
+
+    @Override
+    public void interrupt() {
+        super.interrupt();
+
+        fileDTO.getDestination().delete();
     }
 }

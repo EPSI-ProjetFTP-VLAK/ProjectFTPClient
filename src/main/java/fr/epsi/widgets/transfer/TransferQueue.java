@@ -5,15 +5,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.ProgressBarTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class TransferQueue extends TableView {
+public class TransferQueue extends TableView<TransferThread> {
 
-    ObservableList<Thread> transferThreads = FXCollections.observableArrayList();
+    ObservableList<TransferThread> transferThreads = FXCollections.observableArrayList();
 
     public TransferQueue() {
         generateColumns();
@@ -34,11 +35,11 @@ public class TransferQueue extends TableView {
 
         // Colonne Débit
         TableColumn bandwidthColumn = new TableColumn("Débit");
-        bandwidthColumn.setCellValueFactory(new PropertyValueFactory<TransferThread, Double>("bandwidth"));
+        bandwidthColumn.setCellValueFactory(new PropertyValueFactory<TransferThread, String>("bandwidth"));
 
         // Colonne Taille
         TableColumn sizeColumn = new TableColumn("Taille");
-        sizeColumn.setCellValueFactory(new PropertyValueFactory<TransferThread, Double>("size"));
+        sizeColumn.setCellValueFactory(new PropertyValueFactory<TransferThread, String>("size"));
 
         // Colonne Destination
         TableColumn destinationColumn = new TableColumn("Destination");
@@ -52,12 +53,18 @@ public class TransferQueue extends TableView {
         cancelMenuItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                getItems().get(getSelectionModel().getSelectedIndex());
+                TransferThread transferThread = getSelectionModel().getSelectedItem();
+                if (transferThread != null) {
+                    transferThread.interrupt();
+                    getItems().remove(transferThread);
+                }
             }
         });
+
+        setContextMenu(new ContextMenu(cancelMenuItem));
     }
 
-    public ObservableList<Thread> getTransferThreads() {
+    public ObservableList<TransferThread> getTransferThreads() {
         return transferThreads;
     }
 }
