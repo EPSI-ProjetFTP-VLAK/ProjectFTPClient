@@ -8,7 +8,7 @@ public abstract class FTPCommand {
 
     public static String SEPARATOR = "::--::";
 
-    private boolean executed;
+    protected boolean executed;
     protected Object[] response;
 
     public FTPCommand() {

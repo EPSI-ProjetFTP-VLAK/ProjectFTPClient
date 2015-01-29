@@ -23,6 +23,7 @@ public abstract class AbstractExplorer extends TreeView<String> {
 
     public abstract void doOnFileDrag(MouseEvent mouseEvent);
     public abstract void doOnFileDrop(FileTreeItem sourceFileTreeItem, FileTreeItem targetFileTreeItem, DragEvent dragEvent);
+    public abstract void doOnDeleteEvent(FileDTO fileDTO);
     public abstract void initializeNodes();
 
     private void assignCellFactory() {
@@ -38,6 +39,11 @@ public abstract class AbstractExplorer extends TreeView<String> {
                     @Override
                     protected void doOnDrop(FileTreeItem sourceFileTreeItem, FileTreeItem targetFileTreeItem, DragEvent dragEvent) {
                         doOnFileDrop(sourceFileTreeItem, targetFileTreeItem, dragEvent);
+                    }
+
+                    @Override
+                    protected void doOnDelete(FileDTO fileDTO) {
+                        doOnDeleteEvent(fileDTO);
                     }
                 };
             }

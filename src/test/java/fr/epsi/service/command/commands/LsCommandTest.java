@@ -11,7 +11,7 @@ import java.io.File;
 import static org.junit.Assert.assertEquals;
 
 public class LsCommandTest extends FTPCommandTest {
-    private FileDTO[] mockedFiles;
+    protected FileDTO[] mockedFiles;
 
     public LsCommandTest() {
         super(Mockito.spy(new LsCommand()));

@@ -1,36 +1,38 @@
 package fr.epsi.service.command.commands;
 
+import fr.epsi.dto.FileDTO;
+
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class RmCommand extends FTPCommand {
+public class RmCommand extends LsCommand {
 
-    private File file;
+    private FileDTO fileDTO;
 
-    public RmCommand(File file) {
+    public RmCommand(FileDTO fileDTO) {
         super();
 
-        this.file = file;
+        this.fileDTO = fileDTO;
     }
 
     @Override
     public void execute() throws Exception {
         try {
             PrintWriter out = getSocketPrintWriter();
-            out.println("rm" + SEPARATOR + file.toString());
+            out.println("rm" + SEPARATOR + fileDTO.getFile().toPath().getFileName());
             out.flush();
 
-            BufferedReader stringIn = getSocketBufferedReader();
-            String[] socketResponse = stringIn.readLine().split(":");
+            BufferedReader in = getSocketBufferedReader();
+            String responseStatus = in.readLine().split(" : ")[1];
 
-            super.execute();
+            if (!responseStatus.equals("OK")) {
+                executed = true;
 
-            if (Integer.valueOf(socketResponse[1]) != 0) {
-                throw new Exception("Wrong response code");
+                throw new Exception("Wrong response status !");
             }
 
+            super.execute();
         } catch (IOException e) {
             e.printStackTrace();
         }

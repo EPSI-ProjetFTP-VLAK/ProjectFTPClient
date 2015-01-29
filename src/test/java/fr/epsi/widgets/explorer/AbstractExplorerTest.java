@@ -1,6 +1,7 @@
 package fr.epsi.widgets.explorer;
 
 import fr.epsi.controller.MainController;
+import fr.epsi.dto.FileDTO;
 import fr.epsi.service.command.CommandService;
 import fr.epsi.service.command.commands.FTPCommand;
 import fr.epsi.widgets.explorer.filetree.FileTreeItem;
@@ -38,6 +39,11 @@ public class AbstractExplorerTest {;
 
             @Override
             public void doOnFileDrop(FileTreeItem sourceFileTreeItem, FileTreeItem targetFileTreeItem, DragEvent dragEvent) {
+
+            }
+
+            @Override
+            public void doOnDeleteEvent(FileDTO fileDTO) {
 
             }
 

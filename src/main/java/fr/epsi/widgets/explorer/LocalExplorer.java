@@ -36,6 +36,11 @@ public class LocalExplorer extends AbstractExplorer {
     }
 
     @Override
+    public void doOnDeleteEvent(FileDTO fileDTO) {
+
+    }
+
+    @Override
     public void initializeNodes() {
         File[] rootDirectories = FileSystemView.getFileSystemView().getRoots();
         for (File rootDirectory : rootDirectories) {
