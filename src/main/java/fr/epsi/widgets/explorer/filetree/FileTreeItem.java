@@ -1,9 +1,11 @@
 package fr.epsi.widgets.explorer.filetree;
 
+import fr.epsi.Main;
 import fr.epsi.dto.FileDTO;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TreeItem;
+import javafx.scene.image.ImageView;
 
 import java.io.File;
 
@@ -24,9 +26,9 @@ public abstract class FileTreeItem extends TreeItem<String> {
     protected void setParameters() {
         if(file.isDirectory()) {
             setExpanded(false);
-            //TODO ajouter image setGraphic(new ImageView(folderCollapseImage));
+            setGraphic(new ImageView(Main.class.getResource("/images/folder.png").toExternalForm()));
         } else {
-            //TODO ajouter image setGraphic(new ImageView(fileImage));
+            setGraphic(new ImageView(Main.class.getResource("/images/file.png").toExternalForm()));
         }
 
         if(!file.getFile().toPath().toString().endsWith(File.separator)) {
