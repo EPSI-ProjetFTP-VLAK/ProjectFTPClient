@@ -66,14 +66,14 @@ public class UploadService extends FTPService {
                     }
 
 
-                    console.appendText("Downloading " + file.getName() + "...\n");
+                    console.appendText("Uploading " + file.getName() + "...\n");
                 }
             }
         };
     }
 
     public UploadThread createUploadThread(FileDTO fileDTO) throws IOException {
-        return new UploadThread(fileDTO, getSocketBufferedOutputStream(), getFileInputStream(fileDTO));
+        return new UploadThread(fileDTO, getSocket(), getSocketBufferedOutputStream(), getFileInputStream(fileDTO));
     }
 
     public BufferedOutputStream getSocketBufferedOutputStream() throws IOException {
@@ -81,7 +81,7 @@ public class UploadService extends FTPService {
     }
 
     public FileInputStream getFileInputStream(FileDTO file) throws IOException {
-        return new FileInputStream(file.getDestination());
+        return new FileInputStream(file.getFile());
     }
 
     @Override

@@ -35,6 +35,8 @@ public class DownloadThread extends TransferThread {
             e.printStackTrace();
         }
 
+        progress = 1.0;
+
         super.run();
     }
 

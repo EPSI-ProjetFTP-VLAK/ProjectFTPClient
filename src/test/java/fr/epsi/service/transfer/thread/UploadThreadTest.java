@@ -8,11 +8,13 @@ import org.mockito.Mockito;
 
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
+import java.net.Socket;
 
 public class UploadThreadTest extends TransferThreadTest {
 
     private static long SOURCE_FILE_LENGTH = 10000L;
 
+    private Socket mockedSocket;
     private BufferedOutputStream mockedBufferedOutputStream;
     private FileInputStream mockedFileInputStream;
 
@@ -27,7 +29,9 @@ public class UploadThreadTest extends TransferThreadTest {
         mockedBufferedOutputStream = Mockito.mock(BufferedOutputStream.class);
         mockedFileInputStream = Mockito.mock(FileInputStream.class);
 
-        transferThread = new UploadThread(mockedFileDTO, mockedBufferedOutputStream, mockedFileInputStream);
+        mockedSocket = Mockito.mock(Socket.class);
+
+        transferThread = new UploadThread(mockedFileDTO, mockedSocket, mockedBufferedOutputStream, mockedFileInputStream);
     }
 
     @After
@@ -45,6 +49,7 @@ public class UploadThreadTest extends TransferThreadTest {
         transferThread.join();
 
         Mockito.verify(mockedBufferedOutputStream, Mockito.times(1)).write(destinationBuffer, 0, (int) SOURCE_FILE_LENGTH);
+        Mockito.verify(mockedSocket, Mockito.times(1)).shutdownOutput();
     }
 
     @Test
