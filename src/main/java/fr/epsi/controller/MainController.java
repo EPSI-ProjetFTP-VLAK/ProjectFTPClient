@@ -43,11 +43,11 @@ public class MainController implements Initializable {
         downloadService.start();
     }
 
-    public static ExecutorService getExecutorService() {
+    public synchronized static ExecutorService getExecutorService() {
         return executorService;
     }
 
-    public static ConnectionService getConnectionService() {
+    public synchronized static ConnectionService getConnectionService() {
         return connectionService;
     }
 
@@ -55,7 +55,7 @@ public class MainController implements Initializable {
         return commandService;
     }
 
-    public static DownloadService getDownloadService() {
+    public synchronized static DownloadService getDownloadService() {
         return downloadService;
     }
 }

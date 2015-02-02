@@ -56,11 +56,11 @@ public class CommandService extends FTPService {
         };
     }
 
-    public void setCommandQueue(Queue<FTPCommand> commandQueue) {
+    public synchronized void setCommandQueue(Queue<FTPCommand> commandQueue) {
         this.commandQueue = commandQueue;
     }
 
-    public Queue<FTPCommand> getCommandQueue() {
+    public synchronized Queue<FTPCommand> getCommandQueue() {
         return commandQueue;
     }
 }

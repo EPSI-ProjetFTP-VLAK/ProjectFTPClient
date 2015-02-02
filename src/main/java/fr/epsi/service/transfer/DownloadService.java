@@ -104,19 +104,19 @@ public class DownloadService extends FTPService {
         return socket;
     }
 
-    public Queue<FileDTO> getDownloadQueue() {
+    public synchronized Queue<FileDTO> getDownloadQueue() {
         return downloadQueue;
     }
 
-    public void setDownloadQueue(Queue<FileDTO> downloadQueue) {
+    public synchronized void setDownloadQueue(Queue<FileDTO> downloadQueue) {
         this.downloadQueue = downloadQueue;
     }
 
-    public TransferQueue getTransferQueue() {
+    public synchronized TransferQueue getTransferQueue() {
         return transferQueue;
     }
 
-    public void setTransferQueue(TransferQueue transferQueue) {
+    public synchronized void setTransferQueue(TransferQueue transferQueue) {
         this.transferQueue = transferQueue;
     }
 }
