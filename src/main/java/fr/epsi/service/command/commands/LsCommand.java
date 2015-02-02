@@ -2,7 +2,10 @@ package fr.epsi.service.command.commands;
 
 import fr.epsi.dto.FileDTO;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.PrintWriter;
 
 public class LsCommand extends FTPCommand {
 

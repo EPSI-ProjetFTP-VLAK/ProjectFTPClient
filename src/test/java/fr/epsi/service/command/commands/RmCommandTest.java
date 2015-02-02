@@ -8,7 +8,7 @@ import org.mockito.Mockito;
 
 import java.io.File;
 
-public class RmCommandTest extends LsCommandTest {
+public class RmCommandTest extends FTPCommandTest {
 
     public RmCommandTest() {
         super(Mockito.spy(new RmCommand(new FileDTO(new File("test-directory/test-file")))));
@@ -29,14 +29,14 @@ public class RmCommandTest extends LsCommandTest {
     @Test
     @Override
     public void testExecute() throws Exception {
-        Mockito.doReturn("rm : OK").doReturn("ls:" + mockedFiles.length).when(mockedBufferedReader).readLine();
+        Mockito.doReturn("rm : OK").when(mockedBufferedReader).readLine();
 
         mockedFtpCommand.execute();
 
         Mockito.verify(mockedPrintWriter).println("rm" + FTPCommand.SEPARATOR + "test-file");
         Mockito.verify(mockedPrintWriter, Mockito.atLeast(1)).flush();
 
-        Mockito.verify(mockedBufferedReader, Mockito.times(2)).readLine();
+        Mockito.verify(mockedBufferedReader, Mockito.times(1)).readLine();
     }
 
     @Test(expected = Exception.class)
@@ -44,10 +44,5 @@ public class RmCommandTest extends LsCommandTest {
         Mockito.doReturn("rm : NOK").when(mockedBufferedReader).readLine();
 
         mockedFtpCommand.execute();
-    }
-
-    @Override
-    public void testExecuteWithFourFiles() throws Exception {
-        Mockito.doReturn(true).when(mockedFtpCommand).isExecuted();
     }
 }

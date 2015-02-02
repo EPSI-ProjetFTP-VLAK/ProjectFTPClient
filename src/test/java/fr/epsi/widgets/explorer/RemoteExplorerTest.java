@@ -55,7 +55,7 @@ public class RemoteExplorerTest extends AbstractExplorerTest {
 
         Mockito.doReturn(mockedRmCommand).when((RemoteExplorer) explorer).createRmDirCommand(mockedFileDTO);
 
-        ((RemoteExplorer) explorer).doOnDeleteEvent(mockedFileDTO);
+        explorer.doOnDeleteEvent(mockedFileDTO);
 
         Mockito.verify(mockedCommandQueue).offer(mockedRmCommand);
         Mockito.verify(mockedRmCommand, Mockito.atLeast(1)).isExecuted();

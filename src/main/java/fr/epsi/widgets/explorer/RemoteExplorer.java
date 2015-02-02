@@ -24,7 +24,6 @@ public class RemoteExplorer extends AbstractExplorer {
         RmCommand rmCommand = createRmDirCommand(fileDTO);
 
         MainController.getCommandService().getCommandQueue().offer(rmCommand);
-        while (!rmCommand.isExecuted()) {}
     }
 
     public RmCommand createRmDirCommand(FileDTO fileDTO) {

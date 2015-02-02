@@ -102,7 +102,10 @@ public abstract class FileTreeCell extends TreeCell<String> {
         deleteMenuItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                doOnDelete(((RemoteFileTreeItem) getTreeView().getSelectionModel().getSelectedItem()).getFileDTO());
+                RemoteFileTreeItem selectedItem = ((RemoteFileTreeItem) getTreeView().getSelectionModel().getSelectedItem());
+
+                doOnDelete(selectedItem.getFileDTO());
+                selectedItem.getParent().getChildren().remove(selectedItem);
             }
         });
 
