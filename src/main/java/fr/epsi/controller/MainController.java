@@ -3,6 +3,7 @@ package fr.epsi.controller;
 import fr.epsi.service.command.CommandService;
 import fr.epsi.service.connection.ConnectionService;
 import fr.epsi.service.transfer.DownloadService;
+import fr.epsi.service.transfer.UploadService;
 import fr.epsi.widgets.transfer.TransferQueue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -20,6 +21,7 @@ public class MainController implements Initializable {
     private static ConnectionService connectionService;
     private static CommandService commandService;
     private static DownloadService downloadService;
+    private static UploadService uploadService;
 
     @FXML
     private TextArea console;
@@ -29,7 +31,7 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        executorService = Executors.newFixedThreadPool(3);
+        executorService = Executors.newFixedThreadPool(4);
 
         connectionService = new ConnectionService(socket, console);
         connectionService.setExecutor(executorService);
@@ -38,9 +40,13 @@ public class MainController implements Initializable {
         commandService.setExecutor(executorService);
         commandService.start();
 
-        downloadService = new DownloadService(socket, console, transferQueue);
+        downloadService = new DownloadService(console, transferQueue);
         downloadService.setExecutor(executorService);
         downloadService.start();
+
+        uploadService = new UploadService(console, transferQueue);
+        uploadService.setExecutor(executorService);
+        uploadService.start();
     }
 
     public synchronized static ExecutorService getExecutorService() {

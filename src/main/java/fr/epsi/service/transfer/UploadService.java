@@ -4,26 +4,26 @@ import fr.epsi.controller.MainController;
 import fr.epsi.dto.FileDTO;
 import fr.epsi.service.FTPService;
 import fr.epsi.service.connection.ConnectionState;
-import fr.epsi.service.transfer.thread.DownloadThread;
 import fr.epsi.service.transfer.thread.TransferThread;
+import fr.epsi.service.transfer.thread.UploadThread;
 import fr.epsi.widgets.transfer.TransferQueue;
 import javafx.concurrent.Task;
 import javafx.scene.control.TextArea;
 
-import java.io.BufferedInputStream;
-import java.io.FileOutputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-public class DownloadService extends FTPService {
+public class UploadService extends FTPService {
     private TransferQueue transferQueue;
-    private Queue<FileDTO> downloadQueue = new PriorityQueue<>();
+    private Queue<FileDTO> uploadQueue = new PriorityQueue<>();
 
-    public DownloadService() {}
+    public UploadService() {}
 
-    public DownloadService(TextArea console, TransferQueue transferQueue) {
+    public UploadService(TextArea console, TransferQueue transferQueue) {
         super(null, console);
 
         this.transferQueue = transferQueue;
@@ -36,7 +36,7 @@ public class DownloadService extends FTPService {
             @Override
             protected Void call() throws Exception {
                 while (!isCancelled()) {
-                    downloadNextFile();
+                    uploadNextFile();
 
                     try {
                         Thread.sleep(500);
@@ -51,15 +51,15 @@ public class DownloadService extends FTPService {
                 return null;
             }
 
-            private void downloadNextFile() {
-                if (downloadQueue.size() > 0) {
-                    FileDTO file = downloadQueue.poll();
+            private void uploadNextFile() {
+                if (uploadQueue.size() > 0) {
+                    FileDTO file = uploadQueue.poll();
 
                     try {
-                        TransferThread downloadThread = createDownloadThread(file);
-                        transferQueue.getTransferThreads().add(downloadThread);
+                        TransferThread uploadThread = createUploadThread(file);
+                        transferQueue.getTransferThreads().add(uploadThread);
 
-                        downloadThread.start();
+                        uploadThread.start();
                     } catch (IOException e) {
                         console.appendText("Connection error !\n");
                         e.printStackTrace();
@@ -72,16 +72,16 @@ public class DownloadService extends FTPService {
         };
     }
 
-    public DownloadThread createDownloadThread(FileDTO fileDTO) throws IOException {
-        return new DownloadThread(fileDTO, getSocketBufferedInputStream(), getFileOutputStream(fileDTO));
+    public UploadThread createUploadThread(FileDTO fileDTO) throws IOException {
+        return new UploadThread(fileDTO, getSocketBufferedOutputStream(), getFileInputStream(fileDTO));
     }
 
-    public BufferedInputStream getSocketBufferedInputStream() throws IOException {
-        return new BufferedInputStream(getSocket().getInputStream(), 1024);
+    public BufferedOutputStream getSocketBufferedOutputStream() throws IOException {
+        return new BufferedOutputStream(getSocket().getOutputStream(), 1024);
     }
 
-    public FileOutputStream getFileOutputStream(FileDTO file) throws IOException {
-        return new FileOutputStream(file.getDestination());
+    public FileInputStream getFileInputStream(FileDTO file) throws IOException {
+        return new FileInputStream(file.getDestination());
     }
 
     @Override
@@ -96,7 +96,7 @@ public class DownloadService extends FTPService {
     public Socket createSocket() {
         Socket socket = null;
         try {
-            socket = new Socket(MainController.getConnectionService().getHost(), MainController.getConnectionService().getPort() + 1);
+            socket = new Socket(MainController.getConnectionService().getHost(), MainController.getConnectionService().getPort() + 2);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -104,12 +104,12 @@ public class DownloadService extends FTPService {
         return socket;
     }
 
-    public synchronized Queue<FileDTO> getDownloadQueue() {
-        return downloadQueue;
+    public synchronized Queue<FileDTO> getUploadQueue() {
+        return uploadQueue;
     }
 
-    public synchronized void setDownloadQueue(Queue<FileDTO> downloadQueue) {
-        this.downloadQueue = downloadQueue;
+    public synchronized void setUploadQueue(Queue<FileDTO> uploadQueue) {
+        this.uploadQueue = uploadQueue;
     }
 
     public synchronized TransferQueue getTransferQueue() {
