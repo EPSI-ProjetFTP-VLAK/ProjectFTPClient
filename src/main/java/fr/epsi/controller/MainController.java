@@ -64,4 +64,8 @@ public class MainController implements Initializable {
     public synchronized static DownloadService getDownloadService() {
         return downloadService;
     }
+
+    public synchronized static UploadService getUploadService() {
+        return uploadService;
+    }
 }
