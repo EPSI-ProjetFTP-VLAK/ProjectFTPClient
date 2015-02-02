@@ -1,6 +1,7 @@
 package fr.epsi.service.transfer.thread;
 
 import fr.epsi.dto.FileDTO;
+import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
@@ -23,23 +24,12 @@ public class UploadThread extends TransferThread {
 
     @Override
     public void run() {
-        byte[] bytes = new byte[1024];
-        int length = 0;
-        int byteCount = 1024;
-
         try {
-            while ((length = fileInputStream.read(bytes, 0, 1024)) != -1) {
-                byteCount += 1024;
-                bufferedOutputStream.write(bytes, 0, length);
-                bufferedOutputStream.flush();
-
-                progress = ((double) byteCount / fileDTO.getFile().length());
-            }
-
-            socket.shutdownOutput();
+            IOUtils.copy(fileInputStream, bufferedOutputStream);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        // progress = ((double) byteCount / fileDTO.getFile().length());
 
         progress = 1.0;
 
