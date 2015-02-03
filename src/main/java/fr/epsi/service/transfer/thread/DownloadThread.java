@@ -20,17 +20,28 @@ public class DownloadThread extends TransferThread {
 
     @Override
     public void run() {
-        byte[] bytes = new byte[1024];
-        int length = 0;
-        int byteCount = 1024;
+        try {
+            // IOUtils.copy(bufferedInputStream, fileOutputStream);
+
+            byte[] buffer = new byte[1024];
+            int count;
+            while((count = bufferedInputStream.read(buffer)) >= 0){
+                fileOutputStream.write(buffer);
+            }
+
+            bufferedInputStream.close();
+            fileOutputStream.close();
+
+            // progress = ((double) byteCount / fileDTO.getFile().length());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        progress = 1.0;
 
         try {
-            while ((length = bufferedInputStream.read(bytes, 0, 1024)) != -1 && !isInterrupted()) {
-                byteCount += 1024;
-                fileOutputStream.write(bytes, 0, length);
-
-                progress = ((double) byteCount / fileDTO.getFile().length());
-            }
+            bufferedInputStream.close();
+            fileOutputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

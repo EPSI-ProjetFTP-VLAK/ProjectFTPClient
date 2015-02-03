@@ -27,6 +27,7 @@ public class Main extends Application {
                 MainController.getDownloadService().cancel();
                 MainController.getCommandService().cancel();
                 MainController.getConnectionService().cancel();
+                MainController.getUploadService().cancel();
 
                 MainController.getExecutorService().shutdown();
 

@@ -1,5 +1,6 @@
 package fr.epsi.service.command.commands;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -24,6 +25,10 @@ public class CdCommand extends LsCommand {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        BufferedReader stringIn = getSocketBufferedReader();
+        stringIn.readLine();
+//        MainController.getConnectionService().getConsole().appendText("Currently at : " + stringIn.readLine() + "...");
 
         super.execute();
     }

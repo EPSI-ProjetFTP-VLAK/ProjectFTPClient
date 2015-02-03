@@ -20,11 +20,17 @@ public class RemoteFileTreeItem extends FileTreeItem {
             CommandService commandService = MainController.getCommandService();
             commandService.getCommandQueue().offer(cdCommand);
 
-            while (commandService.getCommandQueue().contains(cdCommand)) {}
+            while (!cdCommand.isExecuted()) {
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
 
-            file = (FileDTO) cdCommand.getResponse();
+            FileDTO[] files = (FileDTO[]) cdCommand.getResponse();
 
-            for (FileDTO subFile : file.getChildren()) {
+            for (FileDTO subFile : files) {
                 getChildren().add(new RemoteFileTreeItem(subFile));
             }
         }
@@ -35,6 +41,6 @@ public class RemoteFileTreeItem extends FileTreeItem {
     }
 
     public CdCommand createCdCommand() {
-        return new CdCommand(file.toString());
+        return new CdCommand(file.getName());
     }
 }

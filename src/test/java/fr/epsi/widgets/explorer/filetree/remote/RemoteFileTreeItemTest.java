@@ -75,15 +75,16 @@ public class RemoteFileTreeItemTest extends FileTreeItemTest {
 
         File responseDirectory = Mockito.spy(new File("test-directory-1"));
         Mockito.doReturn(true).when(responseDirectory).isDirectory();
-        Mockito.doReturn(new File[] { new File("test-file-1"), new File("test-file-2") }).when(responseDirectory).listFiles();
 
-        FileDTO responseDirectoryDTO = new FileDTO(responseDirectory, true);
+        FileDTO[] responseDirectoriesDTO = new FileDTO[] { new FileDTO(responseDirectory, true), new FileDTO(new File("test-file-1"), false) };
 
-        Mockito.doReturn(responseDirectoryDTO).when(mockedFtpCommand).getResponse();
+        Mockito.doReturn(responseDirectoriesDTO).when(mockedFtpCommand).getResponse();
+
+        Mockito.doReturn(false).doReturn(true).when(mockedFtpCommand).isExecuted();
 
         fileTreeItem.generateChildNodes();
 
-        Mockito.verify(mockedCommandQueue, Mockito.atLeast(1)).contains(mockedFtpCommand);
+        Mockito.verify(mockedFtpCommand, Mockito.atLeast(1)).isExecuted();
         Mockito.verify(mockedCommandQueue).offer(mockedFtpCommand);
 
         assertEquals(responseDirectory.toString(), fileTreeItem.getValue());
