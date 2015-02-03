@@ -70,8 +70,8 @@ public abstract class FileTreeCell extends TreeCell<String> {
             @Override public void handle(DragEvent dragEvent) {
                 Dragboard db = dragEvent.getDragboard();
 
-                if (((Node) dragEvent.getTarget()).getParent() instanceof TreeCellSkin
-                        && dragEvent.getSource() instanceof FileTreeCell) {
+                /*if ((((Node) dragEvent.getTarget()).getParent() instanceof TreeCellSkin)
+                        && (dragEvent.getSource() instanceof FileTreeCell)) {*/
                     FileTreeCell targetFileTreeCell = (FileTreeCell) ((Node) dragEvent.getTarget()).getParent().getParent();
                     FileTreeItem targetFileTreeItem = (FileTreeItem) targetFileTreeCell.getTreeView().getTreeItem(targetFileTreeCell.getIndex());
 
@@ -85,7 +85,7 @@ public abstract class FileTreeCell extends TreeCell<String> {
                     targetFileTreeCell.getStyleClass().remove("hovered");
 
                     doOnDrop(sourceFileTreeItem, targetFileTreeItem, dragEvent);
-                }
+               // }
 
                 dragEvent.setDropCompleted(true);
                 dragEvent.consume();
