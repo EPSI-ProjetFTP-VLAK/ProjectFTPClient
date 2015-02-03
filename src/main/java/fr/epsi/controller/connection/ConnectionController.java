@@ -42,7 +42,7 @@ public class ConnectionController
         connectionService.setPassword(password);
         connectionService.setPort(port);
 
-        connectionService.start();
+        connectionService.restart();
 
         connectionButton.setText("Déconnexion");
         connectionButton.setOnAction(new EventHandler<ActionEvent>() {
