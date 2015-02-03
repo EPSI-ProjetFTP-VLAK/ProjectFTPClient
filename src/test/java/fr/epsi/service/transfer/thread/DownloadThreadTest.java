@@ -1,22 +1,17 @@
 package fr.epsi.service.transfer.thread;
 
 import fr.epsi.dto.FileDTO;
-import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(IOUtils.class)
 public class DownloadThreadTest extends TransferThreadTest {
+
+    private static long SOURCE_FILE_LENGTH = 10000L;
 
     private BufferedInputStream mockedBufferedInputStream;
     private FileOutputStream mockedFileOutputStream;
@@ -25,6 +20,7 @@ public class DownloadThreadTest extends TransferThreadTest {
     public void setUp() throws Exception {
         super.setUp();
 
+        Mockito.doReturn(SOURCE_FILE_LENGTH).when(mockedSourceFile).length();
         mockedFileDTO = Mockito.spy(new FileDTO(mockedSourceFile));
         Mockito.doReturn(mockedDestinationFile).when(mockedFileDTO).getDestination();
 
@@ -32,8 +28,6 @@ public class DownloadThreadTest extends TransferThreadTest {
         mockedFileOutputStream = Mockito.mock(FileOutputStream.class);
 
         transferThread = new DownloadThread(mockedFileDTO, mockedBufferedInputStream, mockedFileOutputStream);
-
-        PowerMockito.mockStatic(IOUtils.class);
     }
 
     @After
@@ -43,15 +37,22 @@ public class DownloadThreadTest extends TransferThreadTest {
 
     @Test
     public void testDownload() throws Exception {
+        byte[] destinationBuffer = new byte[1024];
+
+        Mockito.when(mockedBufferedInputStream.read(destinationBuffer)).thenReturn((int) SOURCE_FILE_LENGTH).thenReturn(-1);
+
         transferThread.run();
         transferThread.join();
 
-        PowerMockito.verifyStatic();
-        IOUtils.copy(mockedBufferedInputStream, mockedFileOutputStream);
+        Mockito.verify(mockedFileOutputStream, Mockito.times(1)).write(destinationBuffer);
     }
 
     @Test
     public void testInterrupt() throws Exception {
+        byte[] destinationBuffer = new byte[1024];
+
+        Mockito.when(mockedBufferedInputStream.read(destinationBuffer)).thenReturn((int) SOURCE_FILE_LENGTH).thenReturn(-1);
+
         transferThread.run();
         transferThread.interrupt();
 

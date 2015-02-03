@@ -1,22 +1,15 @@
 package fr.epsi.service.transfer.thread;
 
 import fr.epsi.dto.FileDTO;
-import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.net.Socket;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(IOUtils.class)
 public class UploadThreadTest extends TransferThreadTest {
 
     private static long SOURCE_FILE_LENGTH = 10000L;
@@ -39,8 +32,6 @@ public class UploadThreadTest extends TransferThreadTest {
         mockedSocket = Mockito.mock(Socket.class);
 
         transferThread = new UploadThread(mockedFileDTO, mockedSocket, mockedBufferedOutputStream, mockedFileInputStream);
-
-        PowerMockito.mockStatic(IOUtils.class);
     }
 
     @After
@@ -50,15 +41,22 @@ public class UploadThreadTest extends TransferThreadTest {
 
     @Test
     public void testUpload() throws Exception {
+        byte[] destinationBuffer = new byte[1024];
+
+        Mockito.when(mockedFileInputStream.read(destinationBuffer)).thenReturn((int) SOURCE_FILE_LENGTH).thenReturn(-1);
+
         transferThread.run();
         transferThread.join();
 
-        PowerMockito.verifyStatic();
-        IOUtils.copy(mockedFileInputStream, mockedBufferedOutputStream);
+        Mockito.verify(mockedBufferedOutputStream, Mockito.times(1)).write(destinationBuffer, 0, (int) SOURCE_FILE_LENGTH);
     }
 
     @Test
     public void testInterrupt() throws Exception {
+        byte[] destinationBuffer = new byte[1024];
+
+        Mockito.when(mockedFileInputStream.read(destinationBuffer)).thenReturn((int) SOURCE_FILE_LENGTH).thenReturn(-1);
+
         transferThread.run();
         transferThread.interrupt();
     }

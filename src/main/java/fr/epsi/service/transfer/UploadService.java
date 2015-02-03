@@ -77,7 +77,7 @@ public class UploadService extends FTPService {
     }
 
     public BufferedOutputStream getSocketBufferedOutputStream() throws IOException {
-        return new BufferedOutputStream(getSocket().getOutputStream(), 1024);
+        return new BufferedOutputStream(getSocket().getOutputStream());
     }
 
     public FileInputStream getFileInputStream(FileDTO file) throws IOException {
