@@ -61,9 +61,6 @@ public class UploadCommandTest extends FTPCommandTest {
 
         mockedFtpCommand.execute();
 
-        Mockito.verify(mockedPrintWriter).println("up" + FTPCommand.SEPARATOR + mockedFileDTO.getName());
-        Mockito.verify(mockedPrintWriter, Mockito.atLeast(1)).flush();
-
         Mockito.verify(mockedDownloadQueue, Mockito.times(1)).offer(mockedFileDTO);
 
         Mockito.verify(mockedDownloadQueue, Mockito.atLeast(1)).contains(mockedFileDTO);

@@ -56,7 +56,7 @@ public class ConnectionController
     public void disconnect(ActionEvent actionEvent) {
         connectionService.cancel();
 
-        connectionButton.setText("Connection");
+        connectionButton.setText("Connexion");
         connectionButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {

@@ -6,8 +6,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 public class UploadThreadTest extends TransferThreadTest {
@@ -15,8 +17,10 @@ public class UploadThreadTest extends TransferThreadTest {
     private static long SOURCE_FILE_LENGTH = 10000L;
 
     private Socket mockedSocket;
-    private BufferedOutputStream mockedBufferedOutputStream;
+    private PrintWriter mockedPrintWriter;
+    private DataOutputStream mockedDataOutputStream;
     private FileInputStream mockedFileInputStream;
+    private BufferedReader mockedBufferedReader;
 
     @Before
     public void setUp() throws Exception {
@@ -26,12 +30,21 @@ public class UploadThreadTest extends TransferThreadTest {
         mockedFileDTO = Mockito.spy(new FileDTO(mockedSourceFile));
         Mockito.doReturn(mockedDestinationFile).when(mockedFileDTO).getDestination();
 
-        mockedBufferedOutputStream = Mockito.mock(BufferedOutputStream.class);
+        mockedPrintWriter = Mockito.mock(PrintWriter.class);
+        mockedDataOutputStream = Mockito.mock(DataOutputStream.class);
         mockedFileInputStream = Mockito.mock(FileInputStream.class);
+
+        mockedBufferedReader = Mockito.mock(BufferedReader.class);
+        Mockito.doReturn("upload : OK").when(mockedBufferedReader).readLine();
 
         mockedSocket = Mockito.mock(Socket.class);
 
-        transferThread = new UploadThread(mockedFileDTO, mockedSocket, mockedBufferedOutputStream, mockedFileInputStream);
+        transferThread = Mockito.spy(new UploadThread(mockedFileDTO, mockedSocket));
+
+        Mockito.doReturn(mockedPrintWriter).when((UploadThread) transferThread).getSocketPrintWriter();
+        Mockito.doReturn(mockedDataOutputStream).when((UploadThread) transferThread).getSocketDataOutputStream();
+        Mockito.doReturn(mockedFileInputStream).when((UploadThread) transferThread).getSocketFileInputStream();
+        Mockito.doReturn(mockedBufferedReader).when((UploadThread) transferThread).getSocketBufferedReader();
     }
 
     @After
@@ -41,19 +54,19 @@ public class UploadThreadTest extends TransferThreadTest {
 
     @Test
     public void testUpload() throws Exception {
-        byte[] destinationBuffer = new byte[1024];
+        byte[] destinationBuffer = new byte[4096];
 
         Mockito.when(mockedFileInputStream.read(destinationBuffer)).thenReturn((int) SOURCE_FILE_LENGTH).thenReturn(-1);
 
         transferThread.run();
         transferThread.join();
 
-        Mockito.verify(mockedBufferedOutputStream, Mockito.times(1)).write(destinationBuffer, 0, (int) SOURCE_FILE_LENGTH);
+        Mockito.verify(mockedDataOutputStream, Mockito.times(1)).write(destinationBuffer, 0, (int) SOURCE_FILE_LENGTH);
     }
 
     @Test
     public void testInterrupt() throws Exception {
-        byte[] destinationBuffer = new byte[1024];
+        byte[] destinationBuffer = new byte[4096];
 
         Mockito.when(mockedFileInputStream.read(destinationBuffer)).thenReturn((int) SOURCE_FILE_LENGTH).thenReturn(-1);
 

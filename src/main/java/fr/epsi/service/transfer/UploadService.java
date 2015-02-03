@@ -10,9 +10,9 @@ import fr.epsi.widgets.transfer.TransferQueue;
 import javafx.concurrent.Task;
 import javafx.scene.control.TextArea;
 
-import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -73,11 +73,11 @@ public class UploadService extends FTPService {
     }
 
     public UploadThread createUploadThread(FileDTO fileDTO) throws IOException {
-        return new UploadThread(fileDTO, getSocket(), getSocketBufferedOutputStream(), getFileInputStream(fileDTO));
+        return new UploadThread(fileDTO, getSocket());
     }
 
-    public BufferedOutputStream getSocketBufferedOutputStream() throws IOException {
-        return new BufferedOutputStream(getSocket().getOutputStream());
+    public OutputStream getSocketOutputStream() throws IOException {
+        return getSocket().getOutputStream();
     }
 
     public FileInputStream getFileInputStream(FileDTO file) throws IOException {
