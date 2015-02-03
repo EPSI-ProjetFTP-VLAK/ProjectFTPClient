@@ -5,6 +5,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
 
 import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
@@ -24,10 +25,14 @@ public class DownloadThreadTest extends TransferThreadTest {
         mockedFileDTO = Mockito.spy(new FileDTO(mockedSourceFile));
         Mockito.doReturn(mockedDestinationFile).when(mockedFileDTO).getDestination();
 
-        mockedBufferedInputStream = Mockito.mock(BufferedInputStream.class);
+        mockedBufferedInputStream = PowerMockito.mock(BufferedInputStream.class);
         mockedFileOutputStream = Mockito.mock(FileOutputStream.class);
 
-        transferThread = new DownloadThread(mockedFileDTO, mockedBufferedInputStream, mockedFileOutputStream);
+        mockedTransferThread = Mockito.spy(new DownloadThread(mockedFileDTO, mockedSocket));
+        Mockito.doReturn(mockedPrintWriter).when(mockedTransferThread).getSocketPrintWriter();
+
+        Mockito.doReturn(mockedBufferedInputStream).when((DownloadThread) mockedTransferThread).getSocketBufferedInputStream();
+        Mockito.doReturn(mockedFileOutputStream).when((DownloadThread) mockedTransferThread).getFileOutputStream();
     }
 
     @After
@@ -37,24 +42,24 @@ public class DownloadThreadTest extends TransferThreadTest {
 
     @Test
     public void testDownload() throws Exception {
-        byte[] destinationBuffer = new byte[1024];
+        byte[] destinationBuffer = new byte[4096];
 
         Mockito.when(mockedBufferedInputStream.read(destinationBuffer)).thenReturn((int) SOURCE_FILE_LENGTH).thenReturn(-1);
 
-        transferThread.run();
-        transferThread.join();
+        mockedTransferThread.run();
+        mockedTransferThread.join();
 
-        Mockito.verify(mockedFileOutputStream, Mockito.times(1)).write(destinationBuffer);
+        Mockito.verify(mockedFileOutputStream, Mockito.times(1)).write(destinationBuffer, 0, (int) SOURCE_FILE_LENGTH);
     }
 
     @Test
     public void testInterrupt() throws Exception {
-        byte[] destinationBuffer = new byte[1024];
+        byte[] destinationBuffer = new byte[4096];
 
         Mockito.when(mockedBufferedInputStream.read(destinationBuffer)).thenReturn((int) SOURCE_FILE_LENGTH).thenReturn(-1);
 
-        transferThread.run();
-        transferThread.interrupt();
+        mockedTransferThread.run();
+        mockedTransferThread.interrupt();
 
         Mockito.verify(mockedDestinationFile, Mockito.times(1)).delete();
     }

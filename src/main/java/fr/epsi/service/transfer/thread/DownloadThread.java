@@ -2,51 +2,58 @@ package fr.epsi.service.transfer.thread;
 
 import fr.epsi.dto.FileDTO;
 
-import java.io.BufferedInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.net.Socket;
 
 public class DownloadThread extends TransferThread {
 
-    private BufferedInputStream bufferedInputStream;
-    private FileOutputStream fileOutputStream;
-
-    public DownloadThread(FileDTO fileDTO, BufferedInputStream bufferedInputStream, FileOutputStream fileOutputStream) {
-        super(fileDTO);
-
-        this.bufferedInputStream = bufferedInputStream;
-        this.fileOutputStream = fileOutputStream;
+    public DownloadThread(FileDTO fileDTO, Socket socket) {
+        super(fileDTO, socket);
     }
 
     @Override
     public void run() {
         try {
-            // IOUtils.copy(bufferedInputStream, fileOutputStream);
+            PrintWriter printWriter = getSocketPrintWriter();
+            printWriter.println("down::--::" + fileDTO.getName());
+            printWriter.flush();
 
-            byte[] buffer = new byte[1024];
-            int count;
-            while((count = bufferedInputStream.read(buffer)) >= 0){
-                fileOutputStream.write(buffer);
+            fileDTO.getDestination().createNewFile();
+            fileDTO.getDestination().setWritable(true, false);
+
+            BufferedInputStream bufferedInputStream = getSocketBufferedInputStream();
+            FileOutputStream fileOutputStream = getFileOutputStream();
+
+            byte[] buffer = new byte[4096];
+            int currentByteCount;
+            long byteCount = 0;
+            while((currentByteCount = bufferedInputStream.read(buffer)) != -1 && !isInterrupted()){
+                fileOutputStream.write(buffer, 0, currentByteCount);
+
+                byteCount += currentByteCount;
+                progress = ((double) byteCount / bufferedInputStream.available());
             }
 
-            bufferedInputStream.close();
             fileOutputStream.close();
-
-            // progress = ((double) byteCount / fileDTO.getFile().length());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         progress = 1.0;
 
-        try {
-            bufferedInputStream.close();
-            fileOutputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         super.run();
+    }
+
+    public PrintWriter getSocketPrintWriter() throws IOException {
+        return new PrintWriter(socket.getOutputStream());
+    }
+
+    public BufferedInputStream getSocketBufferedInputStream() throws IOException {
+        return new BufferedInputStream(new DataInputStream(socket.getInputStream()));
+    }
+
+    public FileOutputStream getFileOutputStream() throws IOException {
+        return new FileOutputStream(fileDTO.getDestination());
     }
 
     @Override

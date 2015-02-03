@@ -6,6 +6,8 @@ import org.junit.Before;
 import org.mockito.Mockito;
 
 import java.io.File;
+import java.io.PrintWriter;
+import java.net.Socket;
 
 import static org.junit.Assert.assertEquals;
 
@@ -14,7 +16,9 @@ public class TransferThreadTest {
     protected File mockedSourceFile;
     protected File mockedDestinationFile;
     protected FileDTO mockedFileDTO;
-    protected TransferThread transferThread;
+    protected Socket mockedSocket;
+    protected PrintWriter mockedPrintWriter;
+    protected TransferThread mockedTransferThread;
 
     @Before
     public void setUp() throws Exception {
@@ -24,11 +28,17 @@ public class TransferThreadTest {
         mockedFileDTO = Mockito.spy(new FileDTO(mockedSourceFile));
         Mockito.doReturn(mockedDestinationFile).when(mockedFileDTO).getDestination();
 
-        transferThread = new TransferThread(mockedFileDTO);
+        mockedPrintWriter = Mockito.mock(PrintWriter.class);
+
+        mockedSocket = Mockito.mock(Socket.class);
+
+        mockedTransferThread = Mockito.spy(new TransferThread(mockedFileDTO, mockedSocket));
+
+        Mockito.doReturn(mockedPrintWriter).when(mockedTransferThread).getSocketPrintWriter();
     }
 
     @After
     public void tearDown() throws Exception {
-        assertEquals(1, transferThread.getProgress(), 1);
+        assertEquals(1, mockedTransferThread.getProgress(), 1);
     }
 }

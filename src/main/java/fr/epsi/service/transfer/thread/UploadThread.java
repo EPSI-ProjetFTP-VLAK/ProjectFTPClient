@@ -7,12 +7,8 @@ import java.net.Socket;
 
 public class UploadThread extends TransferThread {
 
-    private Socket socket;
-
     public UploadThread(FileDTO fileDTO, Socket socket) {
-        super(fileDTO);
-
-        this.socket = socket;
+        super(fileDTO, socket);
     }
 
     @Override
@@ -28,12 +24,12 @@ public class UploadThread extends TransferThread {
             int currentByteCount;
             long byteCount = 0;
             DataOutputStream dataOutputStream = getSocketDataOutputStream();
-            while ((currentByteCount = getSocketFileInputStream().read(buffer)) != -1 && !isInterrupted()) {
+            while ((currentByteCount = getFileInputStream().read(buffer)) != -1 && !isInterrupted()) {
                 dataOutputStream.write(buffer, 0, currentByteCount);
                 dataOutputStream.flush();
 
                 byteCount += (long) currentByteCount;
-                progress = ((double) byteCount / getSocketFileInputStream().available());
+                progress = ((double) byteCount / getFileInputStream().available());
             }
 
             socket.shutdownOutput();
@@ -49,15 +45,11 @@ public class UploadThread extends TransferThread {
         super.run();
     }
 
-    public PrintWriter getSocketPrintWriter() throws IOException {
-        return new PrintWriter(socket.getOutputStream());
-    }
-
     public DataOutputStream getSocketDataOutputStream() throws IOException {
         return new DataOutputStream(socket.getOutputStream());
     }
 
-    public FileInputStream getSocketFileInputStream() throws IOException {
+    public FileInputStream getFileInputStream() throws IOException {
         return new FileInputStream(fileDTO.getFile());
     }
 

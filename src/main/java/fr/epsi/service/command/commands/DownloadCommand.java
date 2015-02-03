@@ -3,9 +3,6 @@ package fr.epsi.service.command.commands;
 import fr.epsi.controller.MainController;
 import fr.epsi.dto.FileDTO;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
 public class DownloadCommand extends FTPCommand {
 
     private FileDTO file;
@@ -21,18 +18,8 @@ public class DownloadCommand extends FTPCommand {
 
     @Override
     public void execute() throws Exception {
-        try {
-            PrintWriter out = getSocketPrintWriter();
-            out.println("down" + SEPARATOR + file.getName());
-            out.flush();
-
-            MainController.getDownloadService().getDownloadQueue().offer(file);
-            while (MainController.getDownloadService().getDownloadQueue().contains(file)) {}
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        MainController.getDownloadService().getDownloadQueue().offer(file);
+        while (MainController.getDownloadService().getDownloadQueue().contains(file)) {}
 
         super.execute();
     }
