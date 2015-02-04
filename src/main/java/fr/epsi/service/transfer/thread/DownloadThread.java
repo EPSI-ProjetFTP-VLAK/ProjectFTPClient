@@ -27,12 +27,15 @@ public class DownloadThread extends TransferThread {
             byte[] buffer = new byte[4096];
             int currentByteCount;
             long byteCount = 0;
+            long fileSize = bufferedInputStream.available();
             while((currentByteCount = bufferedInputStream.read(buffer)) != -1 && !isInterrupted()){
                 fileOutputStream.write(buffer, 0, currentByteCount);
 
                 byteCount += currentByteCount;
-                progress = ((double) byteCount / bufferedInputStream.available());
+                progress = ((double) byteCount / (double) fileSize);
             }
+
+            socket.shutdownInput();
 
             fileOutputStream.close();
         } catch (IOException e) {

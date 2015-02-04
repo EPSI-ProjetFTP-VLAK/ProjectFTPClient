@@ -24,12 +24,14 @@ public class UploadThread extends TransferThread {
             int currentByteCount;
             long byteCount = 0;
             DataOutputStream dataOutputStream = getSocketDataOutputStream();
-            while ((currentByteCount = getFileInputStream().read(buffer)) != -1 && !isInterrupted()) {
+            FileInputStream fileInputStream = getFileInputStream();
+            long fileSize = fileInputStream.available();
+            while ((currentByteCount = fileInputStream.read(buffer)) != -1 && !isInterrupted()) {
                 dataOutputStream.write(buffer, 0, currentByteCount);
                 dataOutputStream.flush();
 
                 byteCount += (long) currentByteCount;
-                progress = ((double) byteCount / getFileInputStream().available());
+                progress = ((double) byteCount / (double) fileSize);
             }
 
             socket.shutdownOutput();
@@ -38,6 +40,8 @@ public class UploadThread extends TransferThread {
             String[] socketResponse = stringIn.readLine().split(":");
 
             progress = 1.0;
+
+            fileInputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
