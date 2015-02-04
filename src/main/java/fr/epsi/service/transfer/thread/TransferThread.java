@@ -1,6 +1,9 @@
 package fr.epsi.service.transfer.thread;
 
 import fr.epsi.dto.FileDTO;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,7 +14,7 @@ public class TransferThread extends Thread {
     protected FileDTO fileDTO;
     protected Socket socket;
     protected String file;
-    protected double progress;
+    protected DoubleProperty progress = new SimpleDoubleProperty(0, "progress");
     protected double bandwidth;
     protected double size;
     protected String destination;
@@ -21,7 +24,6 @@ public class TransferThread extends Thread {
         this.socket = socket;
 
         file = fileDTO.getName();
-        progress = 0;
         bandwidth = 0;
         size = fileDTO.getFile().getTotalSpace();
         destination = fileDTO.getDestination().toString();
@@ -29,7 +31,7 @@ public class TransferThread extends Thread {
 
     @Override
     public void run() {
-        progress = 1;
+        progress.set(1.0);
     }
 
     public String getFile() {
@@ -41,11 +43,15 @@ public class TransferThread extends Thread {
     }
 
     public double getProgress() {
-        return progress;
+        return progress.get();
     }
 
     public void setProgress(double progress) {
-        this.progress = progress;
+        this.progress.set(progress);
+    }
+
+    public ReadOnlyDoubleProperty progressProperty() {
+        return progress;
     }
 
     public double getBandwidvth() {

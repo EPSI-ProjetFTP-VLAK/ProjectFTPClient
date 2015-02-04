@@ -31,7 +31,7 @@ public class UploadThread extends TransferThread {
                 dataOutputStream.flush();
 
                 byteCount += (long) currentByteCount;
-                progress = ((double) byteCount / (double) fileSize);
+                progress.set((double) byteCount / (double) fileSize);
             }
 
             socket.shutdownOutput();
@@ -39,7 +39,7 @@ public class UploadThread extends TransferThread {
             BufferedReader stringIn = getSocketBufferedReader();
             String[] socketResponse = stringIn.readLine().split(":");
 
-            progress = 1.0;
+            progress.set(1.0);
 
             fileInputStream.close();
         } catch (IOException e) {

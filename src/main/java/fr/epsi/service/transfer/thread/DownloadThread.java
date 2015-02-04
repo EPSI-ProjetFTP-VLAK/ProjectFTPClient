@@ -32,7 +32,7 @@ public class DownloadThread extends TransferThread {
                 fileOutputStream.write(buffer, 0, currentByteCount);
 
                 byteCount += currentByteCount;
-                progress = ((double) byteCount / (double) fileSize);
+                progress.set((double) byteCount / (double) fileSize);
             }
 
             socket.shutdownInput();
@@ -42,7 +42,7 @@ public class DownloadThread extends TransferThread {
             e.printStackTrace();
         }
 
-        progress = 1.0;
+        progress.set(1.0);
 
         super.run();
     }
