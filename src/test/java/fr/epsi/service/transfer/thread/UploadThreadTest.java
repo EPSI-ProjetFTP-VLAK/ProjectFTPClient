@@ -27,7 +27,9 @@ public class UploadThreadTest extends TransferThreadTest {
         Mockito.doReturn(mockedDestinationFile).when(mockedFileDTO).getDestination();
 
         mockedDataOutputStream = Mockito.mock(DataOutputStream.class);
+
         mockedFileInputStream = Mockito.mock(FileInputStream.class);
+        Mockito.doReturn((int) SOURCE_FILE_LENGTH).when(mockedFileInputStream).available();
 
         mockedBufferedReader = Mockito.mock(BufferedReader.class);
         Mockito.doReturn("upload : OK").when(mockedBufferedReader).readLine();
@@ -54,6 +56,7 @@ public class UploadThreadTest extends TransferThreadTest {
         mockedTransferThread.run();
         mockedTransferThread.join();
 
+        Mockito.verify(mockedPrintWriter, Mockito.times(1)).println("up::--::" + mockedFileDTO.getName());
         Mockito.verify(mockedDataOutputStream, Mockito.times(1)).write(destinationBuffer, 0, (int) SOURCE_FILE_LENGTH);
     }
 

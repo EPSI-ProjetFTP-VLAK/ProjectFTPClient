@@ -18,21 +18,28 @@ public class DownloadThread extends TransferThread {
             printWriter.println("down::--::" + fileDTO.getName());
             printWriter.flush();
 
+            BufferedInputStream bufferedInputStream = getSocketBufferedInputStream();
+            fileSize.set(bufferedInputStream.available());
+
             fileDTO.getDestination().createNewFile();
             fileDTO.getDestination().setWritable(true, false);
 
-            BufferedInputStream bufferedInputStream = getSocketBufferedInputStream();
             FileOutputStream fileOutputStream = getFileOutputStream();
 
             byte[] buffer = new byte[4096];
             int currentByteCount;
             long byteCount = 0;
-            long fileSize = bufferedInputStream.available();
             while((currentByteCount = bufferedInputStream.read(buffer)) != -1 && !isInterrupted()){
                 fileOutputStream.write(buffer, 0, currentByteCount);
 
                 byteCount += currentByteCount;
-                progress.set((double) byteCount / (double) fileSize);
+
+                try {
+                    progress.set((double) byteCount / (double) fileSize.get());
+                    transferred.set(byteCount);
+                } catch (NullPointerException ignored) {
+
+                }
             }
 
             socket.shutdownInput();

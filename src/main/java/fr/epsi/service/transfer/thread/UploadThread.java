@@ -18,20 +18,27 @@ public class UploadThread extends TransferThread {
             printWriter.println("up::--::" + fileDTO.getName());
             printWriter.flush();
 
+            FileInputStream fileInputStream = getFileInputStream();
+            fileSize.set(fileInputStream.available());
+
             //IOUtils.copy(fileInputStream, new DataOutputStream(socket.getOutputStream()));
 
             byte[] buffer = new byte[4096];
             int currentByteCount;
             long byteCount = 0;
             DataOutputStream dataOutputStream = getSocketDataOutputStream();
-            FileInputStream fileInputStream = getFileInputStream();
-            long fileSize = fileInputStream.available();
             while ((currentByteCount = fileInputStream.read(buffer)) != -1 && !isInterrupted()) {
                 dataOutputStream.write(buffer, 0, currentByteCount);
                 dataOutputStream.flush();
 
                 byteCount += (long) currentByteCount;
-                progress.set((double) byteCount / (double) fileSize);
+
+                try {
+                    progress.set((double) byteCount / (double) fileSize.get());
+                    transferred.set(byteCount);
+                } catch (NullPointerException ignored) {
+
+                }
             }
 
             socket.shutdownOutput();

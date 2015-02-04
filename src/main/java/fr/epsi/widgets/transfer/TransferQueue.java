@@ -34,12 +34,12 @@ public class TransferQueue extends TableView<TransferThread> {
         progressColumn.setCellFactory(ProgressBarTableCell.<TransferThread> forTableColumn());
 
         // Colonne Débit
-        TableColumn bandwidthColumn = new TableColumn("Débit");
-        bandwidthColumn.setCellValueFactory(new PropertyValueFactory<TransferThread, String>("bandwidth"));
+        TableColumn bandwidthColumn = new TableColumn("Transféré");
+        bandwidthColumn.setCellValueFactory(new PropertyValueFactory<TransferThread, Long>("transferred"));
 
         // Colonne Taille
         TableColumn sizeColumn = new TableColumn("Taille");
-        sizeColumn.setCellValueFactory(new PropertyValueFactory<TransferThread, String>("size"));
+        sizeColumn.setCellValueFactory(new PropertyValueFactory<TransferThread, Long>("fileSize"));
 
         // Colonne Destination
         TableColumn destinationColumn = new TableColumn("Destination");

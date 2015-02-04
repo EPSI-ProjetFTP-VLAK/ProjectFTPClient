@@ -25,8 +25,10 @@ public class DownloadThreadTest extends TransferThreadTest {
         mockedFileDTO = Mockito.spy(new FileDTO(mockedSourceFile));
         Mockito.doReturn(mockedDestinationFile).when(mockedFileDTO).getDestination();
 
-        mockedBufferedInputStream = PowerMockito.mock(BufferedInputStream.class);
         mockedFileOutputStream = Mockito.mock(FileOutputStream.class);
+
+        mockedBufferedInputStream = PowerMockito.mock(BufferedInputStream.class);
+        Mockito.doReturn((int) SOURCE_FILE_LENGTH).when(mockedBufferedInputStream).available();
 
         mockedTransferThread = Mockito.spy(new DownloadThread(mockedFileDTO, mockedSocket));
         Mockito.doReturn(mockedPrintWriter).when(mockedTransferThread).getSocketPrintWriter();
@@ -49,6 +51,7 @@ public class DownloadThreadTest extends TransferThreadTest {
         mockedTransferThread.run();
         mockedTransferThread.join();
 
+        Mockito.verify(mockedPrintWriter, Mockito.times(1)).println("down::--::" + mockedFileDTO.getName());
         Mockito.verify(mockedFileOutputStream, Mockito.times(1)).write(destinationBuffer, 0, (int) SOURCE_FILE_LENGTH);
     }
 

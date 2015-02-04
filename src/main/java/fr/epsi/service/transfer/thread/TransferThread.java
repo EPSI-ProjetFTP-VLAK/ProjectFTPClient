@@ -1,9 +1,7 @@
 package fr.epsi.service.transfer.thread;
 
 import fr.epsi.dto.FileDTO;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,8 +13,8 @@ public class TransferThread extends Thread {
     protected Socket socket;
     protected String file;
     protected DoubleProperty progress = new SimpleDoubleProperty(0, "progress");
-    protected double bandwidth;
-    protected double size;
+    protected LongProperty transferred =  new SimpleLongProperty(0, "transferred");
+    protected LongProperty fileSize =  new SimpleLongProperty(0, "fileSize");
     protected String destination;
 
     public TransferThread(FileDTO fileDTO, Socket socket) {
@@ -24,8 +22,6 @@ public class TransferThread extends Thread {
         this.socket = socket;
 
         file = fileDTO.getName();
-        bandwidth = 0;
-        size = fileDTO.getFile().getTotalSpace();
         destination = fileDTO.getDestination().toString();
     }
 
@@ -55,19 +51,27 @@ public class TransferThread extends Thread {
     }
 
     public double getBandwidvth() {
-        return bandwidth;
+        return transferred.get();
     }
 
-    public void setBandwidth(double bandwith) {
-        this.bandwidth = bandwith;
+    public void setTransferred(long transferred) {
+        this.transferred.set(transferred);
     }
 
-    public double getSize() {
-        return size;
+    public ReadOnlyLongProperty transferredProperty() {
+        return transferred;
     }
 
-    public void setSize(double size) {
-        this.size = size;
+    public double getFileSize() {
+        return fileSize.get();
+    }
+
+    public void setFileSize(long fileSize) {
+        this.fileSize.set(fileSize);
+    }
+
+    public ReadOnlyLongProperty fileSizeProperty() {
+        return fileSize;
     }
 
     public String getDestination() {
